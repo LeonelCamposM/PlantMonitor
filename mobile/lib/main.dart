@@ -44,7 +44,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _incrementCounter() {
-    getData();
     setState(() {
       _counter++;
     });
@@ -52,6 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    getData();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
