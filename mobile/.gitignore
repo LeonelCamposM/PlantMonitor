@@ -1,6 +1,3 @@
-esp32.svd
-debug.cfg
-debug_custom.json
 # Miscellaneous
 *.class
 *.log
@@ -11,6 +8,7 @@ debug_custom.json
 .buildlog/
 .history
 .svn/
+migrate_working_dir/
 
 # IntelliJ related
 *.iml
@@ -34,8 +32,6 @@ debug_custom.json
 .pub/
 /build/
 
-# Web related
-
 # Symbolication related
 app.*.symbols
 
@@ -46,15 +42,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-# Windows
-**/windows/flutter/generated_plugin_registrant.cc
-**/windows/flutter/generated_plugin_registrant.h
-
-scripts/key.json
-
-.vscode
-game_server/node_modules
-game_server/package-lock.json
-windows/flutter/generated_plugins.cmake
-windows/flutter/generated_plugins.cmake
