@@ -58,3 +58,5 @@ game_server/node_modules
 game_server/package-lock.json
 windows/flutter/generated_plugins.cmake
 windows/flutter/generated_plugins.cmake
+
+mobile/android/app/google-services.json
