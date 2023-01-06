@@ -1,6 +1,12 @@
 #include "WiFi.h"
+#include "FirebaseESP32.h"
 #define WIFI_SSID "ARRIS-3215"
 #define WIFI_PASSWORD "50A5DC803215"
+#define TIME_INTERVAL 500
+#define FIREBASE_HOST "https://plantmonitor-ec8fe-default-rtdb.firebaseio.com/"
+#define FIREBASE_AUTH "b9C9nozAzPgX6SvPzaOoRa6eHuhPDOMuTjkHOicZ"
+
+FirebaseData firebaseData;
 
 void startDevices(){
   Serial.begin(115200);
@@ -44,14 +50,25 @@ void startWifiConnection(){
   Serial.println();  
 }
 
+void firebaseInit(){
+  Firebase.begin(FIREBASE_HOST,FIREBASE_AUTH);
+  Firebase.reconnectWiFi(true);
+  if(Firebase.ready()){
+    Serial.println("Connected to firebase");
+  }
+  Firebase.setInt(firebaseData, "/humidity", 78);
+  Firebase.end(firebaseData);
+}
 void setup()
 {
   startDevices();
   startWifiConnection();
-  //scanWifiNetworks();
+  firebaseInit();
+  Serial.println("Finished succesfully");
 }
 
 void loop()
 {
-  
+  // Serial.print("Run ");
+  // delay(TIME_INTERVAL);
 }
