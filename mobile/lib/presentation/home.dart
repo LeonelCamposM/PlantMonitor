@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/infraestructure/db_service.dart';
+import 'package:mobile/infraestructure/soil_meassure_widget.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -39,9 +39,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Meassure(),
+            SoilMeassureWidget(),
           ],
         ),
       ),

@@ -60,3 +60,4 @@ windows/flutter/generated_plugins.cmake
 windows/flutter/generated_plugins.cmake
 
 mobile/android/app/google-services.json
+mobile/ios/Runner/GoogleService-Info.plist
