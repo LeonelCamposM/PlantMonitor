@@ -1,10 +1,23 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/domain/soil_meassure.dart';
 
+// ignore: must_be_immutable
 class Meassure extends StatelessWidget {
   Meassure({Key? key}) : super(key: key);
-  String value = "";
-  DatabaseReference starCountRef = FirebaseDatabase.instance.ref();
+  SoilMeassure soilMeassure = SoilMeassure(0, "");
+  DatabaseReference starCountRef =
+      FirebaseDatabase.instance.ref("users/208210896");
+
+  SoilMeassure getUpdatedValue(AsyncSnapshot<DatabaseEvent> snapshot) {
+    SoilMeassure soilMeassure = SoilMeassure(0, "");
+    if (snapshot.hasData) {
+      Map<dynamic, dynamic> map =
+          snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+      soilMeassure = SoilMeassure.fromJson(map);
+    }
+    return soilMeassure;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,25 +31,9 @@ class Meassure extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('');
         }
-        String newValue = getUpdateValue(snapshot);
-        return Text(newValue);
+        SoilMeassure newValue = getUpdatedValue(snapshot);
+        return Text("${newValue.date} ${newValue.humidity}");
       },
     );
   }
-}
-
-String getUpdateValue(AsyncSnapshot<DatabaseEvent> snapshot) {
-  String val = "";
-  if (!snapshot.hasData) {
-    val = "empty";
-  } else {
-    Map<dynamic, dynamic> map = snapshot.data!.snapshot.value as dynamic;
-    List<dynamic> list = [];
-    list = map.values.toList();
-    for (var element in list) {
-      val += element.toString();
-      print(element);
-    }
-  }
-  return val;
 }
