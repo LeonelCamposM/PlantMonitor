@@ -1,5 +1,5 @@
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:mobile/infraestructure/soil_meassure_widget.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -26,6 +26,16 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<void> fetchAlbum() async {
+    final response = await http.get(Uri.parse('http://192.168.1.22:80/'));
+    if (response.statusCode == 200) {
+      print(response.body);
+      print("done");
+    } else {
+      print("error");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -41,7 +51,9 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SoilMeassureWidget(),
+            Text("hola"),
+            ElevatedButton(onPressed: fetchAlbum, child: Text(""))
+            //SoilMeassureWidget(),
           ],
         ),
       ),

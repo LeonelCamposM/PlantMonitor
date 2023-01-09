@@ -1,7 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/domain/soil_meassure.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 // ignore: must_be_immutable
