@@ -1,6 +1,7 @@
 // ignore: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:mobile/presentation/sensor_configuration.dart/steps/steps.dart';
+import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
 class ButtonBar extends StatelessWidget {
@@ -47,7 +48,7 @@ class ConfigurationForm extends StatefulWidget {
 
 class _ConfigurationFormState extends State<ConfigurationForm> {
   int actualStep = 0;
-  ConfigData formResponse = ConfigData();
+  ConfigData formResponse = ConfigData("", "", "");
 
   void onStepTapped(step) {
     setState(() {
@@ -76,6 +77,26 @@ class _ConfigurationFormState extends State<ConfigurationForm> {
     return 0;
   }
 
+  void sendConfigData(ConfigData formResponse) async {
+    final response = await http.post(
+      Uri.parse('http://192.168.1.22:80/config'),
+      body: formResponse.toJson(),
+    );
+    if (response.statusCode == 200) {
+      if (response.body.contains("ap")) {}
+      switch (response.body) {
+        case "ok ap":
+          print("ap page redirect");
+          break;
+        case "ok wifi":
+          print("wifi page redirect");
+          break;
+      }
+    } else {
+      print("error");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -87,7 +108,7 @@ class _ConfigurationFormState extends State<ConfigurationForm> {
             return ButtonBar(
               actualStep: actualStep,
               controlDetails: controlDetails,
-              send: () => {print("enviado")},
+              send: () => {sendConfigData(formResponse)},
             );
           },
           currentStep: actualStep,
@@ -117,4 +138,18 @@ class ConfigData {
   String communicationType = "wifi";
   String wifiName = "";
   String wifiPass = "";
+
+  ConfigData(this.communicationType, this.wifiName, this.wifiPass);
+
+  factory ConfigData.fromJson(Map<dynamic, dynamic> json) => ConfigData(
+        json['communicationType'] as String,
+        json['wifiName'] as String,
+        json['wifiPass'] as String,
+      );
+
+  Map<dynamic, dynamic> toJson() => {
+        'communicationType': communicationType,
+        'wifiName': wifiName,
+        'wifiPass': wifiPass,
+      };
 }
