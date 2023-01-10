@@ -9,9 +9,11 @@ IPAddress gateway(192,168,1,5);
 IPAddress subnet(255,255,255,0);
 WebServer server(80);
 
-void handle_OnConnect() {
-  Serial.println("new request");
-  server.send(200, "text/html", SendHTML()); // 3
+
+
+void onConfig() {
+  Serial.println("new config request");
+  server.send(200, "text/html", "configSucces"); // 3
 }
 
 String SendHTML() {
@@ -31,7 +33,7 @@ void setup() {
   Serial.print("IP address = ");
   Serial.println(WiFi.softAPIP());
 
-  server.on("/", handle_OnConnect);
+  server.on("/config/", onConfig);
   server.begin();
   Serial.println("Servidor HTTP iniciado");
 }

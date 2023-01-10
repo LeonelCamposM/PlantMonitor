@@ -1,5 +1,6 @@
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:mobile/presentation/sensor_configuration.dart/configurationForm.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -7,12 +8,12 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Plant Monitor',
+      title: 'PlantMonitor',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const MyHomePage(title: 'Plant Monitor'),
+      home: const MyHomePage(title: 'Configuración de sensor'),
     );
   }
 }
@@ -26,15 +27,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<void> fetchAlbum() async {
-    final response = await http.get(Uri.parse('http://192.168.1.22:80/'));
-    if (response.statusCode == 200) {
-      print(response.body);
-      print("done");
-    } else {
-      print("error");
-    }
-  }
+  // Future<void> fetchAlbum() async {
+  //   final response = await http.get(Uri.parse('http://192.168.1.22:80/'));
+  //   if (response.statusCode == 200) {
+  //     print(response.body);
+  //     print("done");
+  //   } else {
+  //     print("error");
+  //   }
+  // }
 
   @override
   void initState() {
@@ -50,11 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text("hola"),
-            ElevatedButton(onPressed: fetchAlbum, child: Text(""))
-            //SoilMeassureWidget(),
-          ],
+          children: const [ConfigurationForm()],
         ),
       ),
     );
