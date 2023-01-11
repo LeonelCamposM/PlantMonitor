@@ -26,6 +26,15 @@ void onConfig() {
     server.send(200, "text/html", "ok ap");
   }
 }
+
+void onGetSensorData() {
+  StaticJsonDocument<200> jsonDoc;
+  jsonDoc["humidity"] = 23;
+  jsonDoc["date"] = "today";
+  String jsonString;
+  serializeJson(jsonDoc, jsonString);
+  server.send(200, "json/doc", jsonString);
+}
  
 void setup() {
   Serial.begin(115200);                              
@@ -41,6 +50,7 @@ void setup() {
 
   // handle post request
   server.on("/config", HTTP_POST, onConfig);
+  server.on("/getSensorData", HTTP_GET, onGetSensorData);
   server.begin();
   Serial.println("Servidor HTTP iniciado");
 }

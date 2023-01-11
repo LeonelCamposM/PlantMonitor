@@ -62,7 +62,7 @@ class _CommunicationRadioSelectState extends State<CommunicationRadioSelect> {
   }
 }
 
-Widget pasoInformacionMedica(bool stepVisible) {
+Widget networkSettingsStep(bool stepVisible) {
   return Column(
     children: [
       const SizedBox(height: 10),

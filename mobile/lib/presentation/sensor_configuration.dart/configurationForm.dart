@@ -123,8 +123,8 @@ class _ConfigurationFormState extends State<ConfigurationForm> {
             ),
             Step(
               title: const Text('Configuración de la conexión'),
-              content: pasoInformacionMedica(
-                  formResponse.communicationType == "wifi"),
+              content:
+                  networkSettingsStep(formResponse.communicationType == "wifi"),
               isActive: actualStep == 1,
             )
           ],

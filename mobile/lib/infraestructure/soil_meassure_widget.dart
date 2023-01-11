@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/domain/soil_meassure.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
 class SoilMeassureWidget extends StatelessWidget {
@@ -58,6 +62,68 @@ class SoilMeassureWidget extends StatelessWidget {
   }
 }
 
+class APSoilMeassureWidget extends StatefulWidget {
+  const APSoilMeassureWidget({Key? key}) : super(key: key);
+
+  @override
+  State<APSoilMeassureWidget> createState() => _APSoilMeassureWidgetState();
+}
+
+class _APSoilMeassureWidgetState extends State<APSoilMeassureWidget> {
+  SoilMeassure soilMeassure = SoilMeassure(0, "");
+  Timer? timer;
+
+  void getUpdatedValue() async {
+    print("data");
+    final response = await http.get(
+      Uri.parse('http://192.168.1.22:80/getSensorData'),
+    );
+    if (response.statusCode == 200) {
+      Map map = json.decode(response.body);
+      setState(() {
+        soilMeassure = SoilMeassure.fromJson(map);
+      });
+    } else {}
+  }
+
+  @override
+  void initState() {
+    getUpdatedValue();
+    super.initState();
+    timer = Timer.periodic(
+        const Duration(seconds: 5), (Timer t) => getUpdatedValue());
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          PercentageWidget(
+            percentaje: soilMeassure.humidity.toDouble(),
+            title: 'Humedad',
+            barColor: Colors.lightBlue,
+          ),
+          PercentageWidget(
+            percentaje: (soilMeassure.humidity.toDouble() + 30) % 100,
+            title: 'Batería',
+            barColor: Colors.yellow,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ignore: must_be_immutable
 class PercentageWidget extends StatelessWidget {
   double percentaje;
   String text = "";

@@ -61,7 +61,11 @@ class _MyHomePageState extends State<MyHomePage> {
         page = Center(child: SoilMeassureWidget());
         break;
       case NavigationState.apDashboard:
-        page = const Center(child: Text("ap"));
+        page = Column(
+          children: const [
+            APSoilMeassureWidget(),
+          ],
+        );
         break;
     }
 
