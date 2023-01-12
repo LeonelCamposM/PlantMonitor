@@ -1,5 +1,6 @@
 // ignore: must_be_immutable
 import 'package:flutter/material.dart';
+import 'package:mobile/domain/esp32_settings.dart';
 import 'package:mobile/presentation/sensor_configuration.dart/steps/steps.dart';
 import 'package:http/http.dart' as http;
 
@@ -48,7 +49,7 @@ class ConfigurationForm extends StatefulWidget {
 
 class _ConfigurationFormState extends State<ConfigurationForm> {
   int actualStep = 0;
-  ConfigData formResponse = ConfigData("", "", "");
+  ESP32Settings formResponse = ESP32Settings("", "", "");
 
   void onStepTapped(step) {
     setState(() {
@@ -77,7 +78,7 @@ class _ConfigurationFormState extends State<ConfigurationForm> {
     return 0;
   }
 
-  void sendConfigData(ConfigData formResponse) async {
+  void sendConfigData(ESP32Settings formResponse) async {
     final response = await http.post(
       Uri.parse('http://192.168.1.22:80/config'),
       body: formResponse.toJson(),
@@ -132,24 +133,4 @@ class _ConfigurationFormState extends State<ConfigurationForm> {
       ),
     );
   }
-}
-
-class ConfigData {
-  String communicationType = "wifi";
-  String wifiName = "";
-  String wifiPass = "";
-
-  ConfigData(this.communicationType, this.wifiName, this.wifiPass);
-
-  factory ConfigData.fromJson(Map<dynamic, dynamic> json) => ConfigData(
-        json['communicationType'] as String,
-        json['wifiName'] as String,
-        json['wifiPass'] as String,
-      );
-
-  Map<dynamic, dynamic> toJson() => {
-        'communicationType': communicationType,
-        'wifiName': wifiName,
-        'wifiPass': wifiPass,
-      };
 }

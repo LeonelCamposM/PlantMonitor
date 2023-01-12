@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/infraestructure/soil_meassure_widget.dart';
+import 'package:mobile/infraestructure/ap_soil_moisture_widget.dart';
+import 'package:mobile/infraestructure/wifi_soil_moisture_widget.dart';
 import 'package:mobile/presentation/sensor_configuration.dart/configurationForm.dart';
 
 enum NavigationState { home, configurationForm, wifiDashboard, apDashboard }
@@ -38,10 +39,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   callback(NavigationState state, dynamic args) {
-    print("callback");
-    print(state);
     setState(() {
-      this.navState = state;
+      navState = state;
       this.args = args;
     });
   }
@@ -58,12 +57,12 @@ class _MyHomePageState extends State<MyHomePage> {
         page = const ConfigurationForm();
         break;
       case NavigationState.wifiDashboard:
-        page = Center(child: SoilMeassureWidget());
+        page = Center(child: WifiSoilMoistureWidget());
         break;
       case NavigationState.apDashboard:
         page = Column(
           children: const [
-            APSoilMeassureWidget(),
+            APSoilMoistureWidget(),
           ],
         );
         break;
