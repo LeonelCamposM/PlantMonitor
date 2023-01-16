@@ -6,12 +6,12 @@ import 'package:mobile/presentation/dashboard/dashboard.dart';
 // ignore: must_be_immutable
 class WifiSoilMoistureWidget extends StatelessWidget {
   WifiSoilMoistureWidget({Key? key}) : super(key: key);
-  SoilMeasure soilMeasure = SoilMeasure(0, "");
+  SoilMeasure soilMeasure = SoilMeasure(0, "", 0);
   DatabaseReference starCountRef =
       FirebaseDatabase.instance.ref("users/208210896");
 
   SoilMeasure getUpdatedValue(AsyncSnapshot<DatabaseEvent> snapshot) {
-    SoilMeasure soilMeasure = SoilMeasure(0, "");
+    SoilMeasure soilMeasure = SoilMeasure(0, "", 0);
     if (snapshot.hasData) {
       Map<dynamic, dynamic> map =
           snapshot.data!.snapshot.value as Map<dynamic, dynamic>;

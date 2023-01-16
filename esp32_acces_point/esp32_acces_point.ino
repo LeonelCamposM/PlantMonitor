@@ -3,6 +3,9 @@
 #include <ArduinoJson.h>
 #include <Wire.h>
 #include <axp20x.h>
+#include <EEPROM.h>
+
+#define EEPROM_SIZE 1
 
 const char* ssid = "PLANTMONITOR";
 const char* password = "12345leo";
@@ -15,7 +18,13 @@ WebServer server(80);
 const int moisturePin = 2;
 int maxMoisture = 2930; // dry 
 int minMoisture = 1697; // wet
+int percentageHumidity;
 AXP20X_Class axp;
+
+bool boardMode = true; // read
+
+const int modeAddr = 0;
+int modeIdx;
 
 void onConfig() {
   StaticJsonDocument<200> jsonDoc;
@@ -34,19 +43,22 @@ void onConfig() {
 
 void onGetSensorData() {
   StaticJsonDocument<200> jsonDoc;
-  int sensorValue = analogRead(moisturePin);
-  int percentageHumidity = map(sensorValue, minMoisture, maxMoisture, 100, 0);
   if(percentageHumidity < 0){
     percentageHumidity = 0;
   }
    if(percentageHumidity > 100){
     percentageHumidity = 100;
   }
-  Serial.println("Moisture: "); 
-  Serial.println(sensorValue); 
+  int percentageBatery = map(axp.getBattVoltage(), 4000, 0, 100, 0);
+  Serial.print(axp.getBattVoltage()); 
+  Serial.print("Batery: "); 
+  Serial.println(percentageBatery);
+  Serial.println(""); 
+  Serial.print("Moisture: "); 
   Serial.println(percentageHumidity); 
   jsonDoc["humidity"] = percentageHumidity;
   jsonDoc["date"] = "today";
+  jsonDoc["batery"] = percentageBatery;
   String jsonString;
   serializeJson(jsonDoc, jsonString);
   server.send(200, "json/doc", jsonString);
@@ -75,57 +87,58 @@ void setup() {
   Wire.begin(21, 22);
   if(axp.begin(Wire, AXP192_SLAVE_ADDRESS) == AXP_FAIL) {
     Serial.println(F("failed to initialize communication with AXP192"));
-  }  
-  // startAccesPoint();
-  // startHttpServer();
-    // Start charging the battery if it is installed.
-  // pmu.setChargeControlCur(AXP1XX_CHARGE_CUR_1000MA);
-  // pmu.setChargingTargetVoltage(AXP202_TARGET_VOL_4_2V);
-  // pmu.enableChargeing(true);
-  // pmu.setChgLEDMode(AXP20X_LED_OFF);
+  }
+  // axp.setChargeControlCur(AXP1XX_CHARGE_CUR_550MA);
+  // axp.setChargingTargetVoltage(AXP202_TARGET_VOL_4_2V);
+  // axp.enableChargeing(true);
+  
+  if(!EEPROM.begin(EEPROM_SIZE)){
+    delay(1000);
+  }
+
+  modeIdx = EEPROM.read(modeAddr);
+  Serial.print("modeIdx : ");
+  Serial.println(modeIdx);
+
+  EEPROM.write(modeAddr, modeIdx !=0 ? 0 : 1);
+  EEPROM.commit();
+
+  if(modeIdx != 0){
+    //READ
+    axp.setChgLEDMode(AXP20X_LED_OFF);
+    Serial.println("READ MODE");
+  }else{
+    //VIEW
+    axp.setChgLEDMode(AXP20X_LED_LOW_LEVEL);
+    Serial.println("AP MODE");
+    WiFi.softAPdisconnect (true);
+    int sensorValue = analogRead(moisturePin);
+    percentageHumidity = map(sensorValue, minMoisture, maxMoisture, 100, 0);
+    Serial.println("Moisture: "); 
+    Serial.println(sensorValue); 
+    Serial.println(percentageHumidity); 
+    Serial.println("");
+    startAccesPoint();
+    startHttpServer();
+  }
 }
 
 void loop() {
-  // server.handleClient();
-  // int sensorValue = analogRead(moisturePin);
-  // int percentageHumidity = map(sensorValue, minMoisture, maxMoisture, 100, 0);
-  // Serial.println("Moisture: "); 
-  // Serial.println(sensorValue); 
-  // Serial.println(percentageHumidity); 
-  // delay(3000);
-  Serial.println("Battery:");
-  Serial.println(axp.getBattChargeCurrent());
-  Serial.print(axp.getBattVoltage());
-  Serial.println(" mV");
-  delay(2000);
+  if(modeIdx != 0){
+    WiFi.softAPdisconnect (true);
+    int sensorValue = analogRead(moisturePin);
+    percentageHumidity = map(sensorValue, minMoisture, maxMoisture, 100, 0);
+    // Serial.println("Moisture: "); 
+    // Serial.println(sensorValue); 
+    // Serial.println(percentageHumidity); 
+    // Serial.println("");
+    // Serial.println("Battery:");
+    // Serial.print(axp.getBattVoltage());
+    // Serial.println(" mV");
+    delay(2000);
+  }else{
+    //VIEW
+    server.handleClient();  
+    delay(1);
+  }
 }
-
-// Power Managment charge battery AXP192
-// #include <Wire.h>
-// // https://github.com/lewisxhe/AXP202X_Library
-// #include <axp20x.h>
-
-// AXP20X_Class axp;
-
-// void setup() {
-//   Serial.begin(115200); 
-//   Wire.begin(21, 22);
-//   if(axp.begin(Wire, AXP192_SLAVE_ADDRESS) == AXP_FAIL) {
-//     Serial.println(F("failed to initialize communication with AXP192"));
-//   }  
-//   // // Start charging the battery if it is installed.
-//   // axp.setChargeControlCur(AXP1XX_CHARGE_CUR_450MA);
-//   // axp.setChargingTargetVoltage(AXP202_TARGET_VOL_4_2V);
-//   // axp.enableChargeing(true);
-//   // Serial.println("Charging:");
-//   // axp.setChgLEDMode(AXP20X_LED_LOW_LEVEL);
-//   // startAccesPoint();
-// }
-
-// void loop() {
-//   // Serial.println("Battery:");
-//   // Serial.println(axp.getBattChargeCurrent());
-//   // Serial.print(axp.getBattVoltage());
-//   // Serial.println(" mV");
-//   // delay(2000);
-// }

@@ -13,7 +13,7 @@ class APSoilMoistureWidget extends StatefulWidget {
 }
 
 class _APSoilMoistureWidgetState extends State<APSoilMoistureWidget> {
-  SoilMeasure soilMeasure = SoilMeasure(0, "");
+  SoilMeasure soilMeasure = SoilMeasure(0, "", 0);
   Timer? timer;
 
   void getUpdatedValue() async {
