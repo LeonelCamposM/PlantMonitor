@@ -34,7 +34,7 @@ int getBatteryPercentage() {
   if(percentageBattery < 0) {
     percentageBattery = 0;
   }
-   if(percentageBattery > 100) {
+  if(percentageBattery > 100) {
     percentageBattery = 100;
   }
   return percentageBattery;

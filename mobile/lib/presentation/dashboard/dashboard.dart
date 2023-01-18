@@ -20,7 +20,7 @@ class Dashboard extends StatelessWidget {
             barColor: Colors.lightBlue,
           ),
           PercentageWidget(
-            percentaje: soilMeasure.batery.toDouble(),
+            percentaje: soilMeasure.battery.toDouble(),
             title: 'Batería',
             barColor: Colors.yellow,
           ),
