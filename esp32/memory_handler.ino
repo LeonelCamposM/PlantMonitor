@@ -1,5 +1,6 @@
 #include <EEPROM.h>
 #define EEPROM_SIZE 1
+
 const int modeAddr = 0;
 int modeIdx;
 

@@ -1,3 +1,4 @@
+#ifdef AP_MODE
 #include <WebServer.h>
 #include <ArduinoJson.h>
 
@@ -22,7 +23,7 @@ void onGetSensorData() {
   int percentageBattery = getBatteryPercentage();
   jsonDoc["humidity"] = 50; // TODO take from EPROM
   jsonDoc["date"] = "today";
-  jsonDoc["batery"] = percentageBattery;
+  jsonDoc["battery"] = percentageBattery;
   String jsonString;
   serializeJson(jsonDoc, jsonString);
   server.send(200, "json/doc", jsonString);
@@ -38,3 +39,4 @@ void startHttpServer(){
 void serverHandleClient(){
   server.handleClient();
 }
+#endif

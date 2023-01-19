@@ -1,6 +1,6 @@
 const int moisturePin = 2;
-int maxMoisture = 2930; // dry 
-int minMoisture = 1697; // wet
+int maxMoisture = 2913; // dry 
+int minMoisture = 1172; // wet
 
 int getMoisturePercentage() {
   int sensorValue = analogRead(moisturePin);
