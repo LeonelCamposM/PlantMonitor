@@ -1,5 +1,4 @@
 #ifdef AP_MODE
-
 const char* ssid = "PLANTMONITOR";
 const char* password = "12345leo";
 IPAddress local_IP(192,168,1,22);
@@ -32,7 +31,7 @@ void setupAPMode(){
       case VIEW: {
         Serial.println("AP MODE");
         setChargeLed(true);
-        getMoisturePercentage(); // TODO append new value to eprom memory
+        // appendMeasure(getMoisturePercentage());
         startAccesPoint();
         startHttpServer();
       } break;
@@ -43,8 +42,8 @@ void setupAPMode(){
 void updateAPMeasurements(){
   switch (boardMode) {
     case READ: {
-      getMoisturePercentage(); // TODO append new value to eprom memory
-      delay(2000);
+      appendMeasure(getMoisturePercentage());
+      delay(9000);
     } break;
     case VIEW: {
       serverHandleClient(); 
