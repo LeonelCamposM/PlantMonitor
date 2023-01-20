@@ -1,4 +1,4 @@
-const int moisturePin = 2;
+const int moisturePin = 36;
 int maxMoisture = 2913; // dry 
 int minMoisture = 1172; // wet
 

@@ -21,7 +21,7 @@ void onConfig() {
 void onGetSensorData() {
   StaticJsonDocument<200> jsonDoc;
   int percentageBattery = getBatteryPercentage();
-  jsonDoc["humidity"] = getLastMeasure();
+  jsonDoc["humidity"] = getMoisturePercentage();
   jsonDoc["date"] = "today";
   jsonDoc["battery"] = percentageBattery;
   String jsonString;

@@ -31,7 +31,6 @@ void setupAPMode(){
       case VIEW: {
         Serial.println("AP MODE");
         setChargeLed(true);
-        // appendMeasure(getMoisturePercentage());
         startAccesPoint();
         startHttpServer();
       } break;
