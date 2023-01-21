@@ -30,7 +30,7 @@ int getBatteryPercentage() {
   Serial.println("Battery:");
   Serial.print(axp.getBattVoltage());
   Serial.println(" mV");
-  int percentageBattery = map(axp.getBattVoltage(), 4000, 0, 100, 0);
+  int percentageBattery = map(axp.getBattVoltage(), 4000, 2030, 100, 0);
   if(percentageBattery < 0) {
     percentageBattery = 0;
   }
