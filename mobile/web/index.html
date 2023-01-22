@@ -120,5 +120,12 @@
         });
     </script>
     <script src="main.dart.js" type="application/javascript"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('flutter-first-frame', function () {
+          navigator.serviceWorker.register('flutter_service_worker.js');
+        });
+      }
+    </script>
   </body>
 </html>
