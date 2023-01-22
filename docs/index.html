@@ -1,5 +1,16 @@
 <!DOCTYPE html>
 <html>
+  <title>Firebase Messaging Demo</title>
+  <style>
+      div {
+          margin-bottom: 15px;
+      }
+  </style>
+  <body>
+      <div id="token"></div>
+      <div id="msg"></div>
+      <div id="notis"></div>
+      <div id="err"></div>
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -15,9 +26,6 @@
     the `--base-href` argument provided to `flutter build`.
     <base href="/">
   -->
- 
-  <base href="/">
-
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
@@ -33,12 +41,10 @@
 
   <title>PlantMonitor</title>
   <link rel="manifest" href="manifest.json">
-  <title>firebase_signup</title>
-  <link rel="manifest" href="manifest.json">
-  <script type="module">
+  <!-- <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-app.js";
-    import { getMessaging } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-messaging.js";
-  </script>
+    import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/9.9.1/firebase-messaging.js";
+  </script> -->
   </head>
 
   <body>
@@ -46,12 +52,69 @@
         application. For more information, see:
         https://developers.google.com/web/fundamentals/primers/service-workers -->
 
-    <script>
+    <!-- <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('flutter-first-frame', function () {
-          navigator.serviceWorker.register('flutter_service_worker.js?v=1259447857');
+          navigator.serviceWorker.register('flutter_service_worker.js?v=3841711594');
         });
       }
+    </script> -->
+    <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-messaging.js"></script>
+        
+    <script>
+        MsgElem = document.getElementById('msg');
+        TokenElem = document.getElementById('token');
+        NotisElem = document.getElementById('notis');
+        ErrElem = document.getElementById('err');
+
+        var firebaseConfig = {
+            apiKey: "AIzaSyCUS7BPyBvhVRGB8gUsHYMOGkxqChLQZyQ",
+            authDomain: "plantmonitor-ec8fe.firebaseapp.com",
+            databaseURL: "https://plantmonitor-ec8fe-default-rtdb.firebaseio.com",
+            projectId: "plantmonitor-ec8fe",
+            storageBucket: "plantmonitor-ec8fe.appspot.com",
+            messagingSenderId: "241290221299",
+            appId: "1:241290221299:web:b0e3a93ff7f59810ebc986"
+        };  
+        firebase.initializeApp(firebaseConfig);
+
+        const messaging = firebase.messaging();
+        messaging
+            .requestPermission()
+            .then(function () {
+                MsgElem.innerHTML = 'Notification permission granted.';
+                console.log('Notification permission granted.');
+
+                // get the token in the form of promise
+                return messaging.getToken();
+            })
+            .then(function (token) {
+                navigator.clipboard.writeText(token);
+                alert(token)
+                console.log(token)
+                TokenElem.innerHTML = 'Device token is : <br>' + token;
+            })
+            .catch(function (err) {
+                ErrElem.innerHTML = ErrElem.innerHTML + '; ' + err;
+                console.log('Unable to get permission to notify.', err);
+            });
+
+        let enableForegroundNotification = true;
+        messaging.onMessage(function (payload) {
+            console.log('Message received. ', payload);
+            NotisElem.innerHTML =
+                NotisElem.innerHTML + JSON.stringify(payload);
+
+            if (enableForegroundNotification) {
+                let notification = payload.notification;
+                navigator.serviceWorker
+                    .getRegistrations()
+                    .then((registration) => {
+                        registration[0].showNotification(notification.title);
+                    });
+            }
+        });
     </script>
     <script src="main.dart.js" type="application/javascript"></script>
   </body>

@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/infraestructure/ap_soil_moisture_widget.dart';
 import 'package:mobile/infraestructure/wifi_soil_moisture_widget.dart';
@@ -35,32 +34,32 @@ class _MyHomePageState extends State<MyHomePage> {
   var args;
   String? token;
 
-  void showFlutterNotification(RemoteMessage message) {
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
-    print(notification!.title.toString());
-    showModalBottomSheet(
-        context: context,
-        builder: ((context) {
-          return Container(
-            child: Text(notification.title.toString()),
-          );
-        }));
-  }
+  // void showFlutterNotification(RemoteMessage message) {
+  //   RemoteNotification? notification = message.notification;
+  //   AndroidNotification? android = message.notification?.android;
+  //   print(notification!.title.toString());
+  //   showModalBottomSheet(
+  //       context: context,
+  //       builder: ((context) {
+  //         return Container(
+  //           child: Text(notification.title.toString()),
+  //         );
+  //       }));
+  // }
 
-  void getToken() async {
-    String? newToken = await FirebaseMessaging.instance.getToken();
-    setState(() {
-      token = newToken;
-    });
+  // void getToken() async {
+  //   String? newToken = await FirebaseMessaging.instance.getToken();
+  //   setState(() {
+  //     token = newToken;
+  //   });
 
-    print(token);
-  }
+  //   print(token);
+  // }
 
   @override
   void initState() {
-    getToken();
-    FirebaseMessaging.onMessage.listen(showFlutterNotification);
+    // getToken();
+    // FirebaseMessaging.onMessage.listen(showFlutterNotification);
     super.initState();
   }
 
