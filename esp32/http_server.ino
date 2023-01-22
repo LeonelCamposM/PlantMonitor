@@ -29,9 +29,15 @@ void onGetSensorData() {
   server.send(200, "json/doc", jsonString);
 }
 
+void onHome() {
+  const char* content = "<!DOCTYPE html><html><body><h1>My First Heading</h1><p>My first paragraph.</p></body></html>";
+  server.send(200, "text/html", content);
+}
+
 void startHttpServer(){
   server.on("/config", HTTP_POST, onConfig);
   server.on("/getSensorData", HTTP_GET, onGetSensorData);
+  server.on("/", HTTP_GET, onHome);
   server.begin();
   Serial.println("Listening on 192.168.1.22:80");
 }

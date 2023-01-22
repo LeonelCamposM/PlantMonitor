@@ -41,7 +41,7 @@ void setupAPMode(){
 void updateAPMeasurements(){
   switch (boardMode) {
     case READ: {
-      appendMeasure(getMoisturePercentage());
+      // appendMeasure(getMoisturePercentage());
       delay(9000);
     } break;
     case VIEW: {

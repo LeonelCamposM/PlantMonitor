@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/infraestructure/ap_soil_moisture_widget.dart';
 import 'package:mobile/infraestructure/wifi_soil_moisture_widget.dart';
@@ -30,11 +31,36 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  NavigationState navState = NavigationState.configurationForm;
+  NavigationState navState = NavigationState.home;
   var args;
+  String? token;
+
+  void showFlutterNotification(RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    print(notification!.title.toString());
+    showModalBottomSheet(
+        context: context,
+        builder: ((context) {
+          return Container(
+            child: Text(notification.title.toString()),
+          );
+        }));
+  }
+
+  void getToken() async {
+    String? newToken = await FirebaseMessaging.instance.getToken();
+    setState(() {
+      token = newToken;
+    });
+
+    print(token);
+  }
 
   @override
   void initState() {
+    getToken();
+    FirebaseMessaging.onMessage.listen(showFlutterNotification);
     super.initState();
   }
 
@@ -47,11 +73,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget page = const ConfigurationForm();
+    Widget page;
 
     switch (navState) {
       case NavigationState.home:
-        page = const Center(child: Text("home"));
+        page = Center(child: Text(token.toString()));
         break;
       case NavigationState.configurationForm:
         page = const ConfigurationForm();
