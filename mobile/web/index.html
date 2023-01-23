@@ -94,7 +94,6 @@
             })
             .then(function (token) {
                 navigator.clipboard.writeText(token);
-                alert(token)
                 console.log(token)
                 TokenElem.innerHTML = 'Device token is : <br>' + token;
             })
@@ -102,28 +101,12 @@
                 ErrElem.innerHTML = ErrElem.innerHTML + '; ' + err;
                 console.log('Unable to get permission to notify.', err);
             });
-
-        let enableForegroundNotification = true;
-        messaging.onMessage(function (payload) {
-            console.log('Message received. ', payload);
-            NotisElem.innerHTML =
-                NotisElem.innerHTML + JSON.stringify(payload);
-
-            if (enableForegroundNotification) {
-                let notification = payload.notification;
-                navigator.serviceWorker
-                    .getRegistrations()
-                    .then((registration) => {
-                        registration[0].showNotification(notification.title);
-                    });
-            }
-        });
     </script>
     <script src="main.dart.js" type="application/javascript"></script>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('flutter-first-frame', function () {
-          navigator.serviceWorker.register('flutter_service_worker.js');
+          navigator.serviceWorker.register('/firebase-messaging-sw.js');
         });
       }
     </script>
