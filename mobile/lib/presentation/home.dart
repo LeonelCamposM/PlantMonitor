@@ -2,7 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/infraestructure/ap_soil_moisture_widget.dart';
 import 'package:mobile/infraestructure/wifi_soil_moisture_widget.dart';
-import 'package:mobile/presentation/sensor_configuration.dart/configurationForm.dart';
+import 'package:mobile/presentation/sensor_configuration.dart/configuration_form.dart';
 
 enum NavigationState { home, configurationForm, wifiDashboard, apDashboard }
 
@@ -32,19 +32,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   NavigationState navState = NavigationState.home;
-  var args;
   String? token;
 
   void showFlutterNotification(RemoteMessage message) {
     RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
-    print(notification!.title.toString());
+    // AndroidNotification? android = message.notification?.android;
     showModalBottomSheet(
         context: context,
         builder: ((context) {
-          return Container(
-            child: Text(notification.title.toString()),
-          );
+          return Text(notification!.title.toString());
         }));
   }
 
@@ -53,8 +49,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       token = newToken;
     });
-
-    print(token);
   }
 
   @override
@@ -62,13 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
     getToken();
     FirebaseMessaging.onMessage.listen(showFlutterNotification);
     super.initState();
-  }
-
-  callback(NavigationState state, dynamic args) {
-    setState(() {
-      navState = state;
-      this.args = args;
-    });
   }
 
   @override

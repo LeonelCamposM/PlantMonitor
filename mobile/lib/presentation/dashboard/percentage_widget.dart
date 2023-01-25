@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
+// ignore: must_be_immutable
 class PercentageWidget extends StatelessWidget {
   double percentaje;
   String text = "";

@@ -87,15 +87,11 @@ class _ConfigurationFormState extends State<ConfigurationForm> {
       if (response.body.contains("ap")) {}
       switch (response.body) {
         case "ok ap":
-          print("ap page redirect");
           break;
         case "ok wifi":
-          print("wifi page redirect");
           break;
       }
-    } else {
-      print("error");
-    }
+    } else {}
   }
 
   @override
