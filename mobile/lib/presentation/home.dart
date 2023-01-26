@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/infraestructure/ap_sensor_measure_widget.dart';
+import 'package:mobile/infraestructure/fcm_repo.dart';
 import 'package:mobile/infraestructure/wifi_sensor_measure_widget.dart';
 import 'package:mobile/presentation/sensor_configuration.dart/configuration_form.dart';
 
@@ -32,11 +33,20 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   NavigationState navState = NavigationState.home;
-  String? token;
+
+  @override
+  void initState() {
+    FirebaseMessagingRepo fcm =
+        FirebaseMessagingRepo(showFlutterNotification: showFlutterNotification);
+    fcm.requestPermission();
+    fcm.startFCM();
+    sendMessage(fcm);
+    super.initState();
+  }
 
   void showFlutterNotification(RemoteMessage message) {
     RemoteNotification? notification = message.notification;
-    // AndroidNotification? android = message.notification?.android;
+    AndroidNotification? android = message.notification?.android;
     showModalBottomSheet(
         context: context,
         builder: ((context) {
@@ -44,18 +54,15 @@ class _MyHomePageState extends State<MyHomePage> {
         }));
   }
 
-  void getToken() async {
-    String? newToken = await FirebaseMessaging.instance.getToken();
-    setState(() {
-      token = newToken;
-    });
-  }
-
-  @override
-  void initState() {
-    getToken();
-    FirebaseMessaging.onMessage.listen(showFlutterNotification);
-    super.initState();
+  void sendMessage(FirebaseMessagingRepo fcm) async {
+    String? token = await fcm.getToken();
+    print(token);
+    fcm.sendPushMessage(token!, "notificacion post", "nueva");
+    print("done");
+    print("done");
+    print("done");
+    print("done");
+    print("done");
   }
 
   @override
@@ -64,7 +71,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch (navState) {
       case NavigationState.home:
-        page = Center(child: Text(token.toString()));
+        page = Center(
+            child: Column(
+          children: const [
+            Text("Inicio"),
+          ],
+        ));
         break;
       case NavigationState.configurationForm:
         page = const ConfigurationForm();
