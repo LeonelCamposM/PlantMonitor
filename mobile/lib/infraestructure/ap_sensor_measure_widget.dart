@@ -2,18 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:mobile/domain/soil_meassure.dart';
+import 'package:mobile/domain/sensor_measure.dart';
 import 'package:mobile/presentation/dashboard/dashboard.dart';
 
-class APSoilMoistureWidget extends StatefulWidget {
-  const APSoilMoistureWidget({Key? key}) : super(key: key);
+class APSensorMeasureWidget extends StatefulWidget {
+  const APSensorMeasureWidget({Key? key}) : super(key: key);
 
   @override
-  State<APSoilMoistureWidget> createState() => _APSoilMoistureWidgetState();
+  State<APSensorMeasureWidget> createState() => _APSensorMeasureWidgetState();
 }
 
-class _APSoilMoistureWidgetState extends State<APSoilMoistureWidget> {
-  SoilMeasure soilMeasure = SoilMeasure(0, "", 0);
+class _APSensorMeasureWidgetState extends State<APSensorMeasureWidget> {
+  SensorMeasure sensorMeasure = SensorMeasure(0, "", 0);
   Timer? timer;
 
   void getUpdatedValue() async {
@@ -23,7 +23,7 @@ class _APSoilMoistureWidgetState extends State<APSoilMoistureWidget> {
     if (response.statusCode == 200) {
       Map map = json.decode(response.body);
       setState(() {
-        soilMeasure = SoilMeasure.fromJson(map);
+        sensorMeasure = SensorMeasure.fromJson(map);
       });
     }
   }
@@ -45,7 +45,7 @@ class _APSoilMoistureWidgetState extends State<APSoilMoistureWidget> {
   @override
   Widget build(BuildContext context) {
     return Dashboard(
-      soilMeasure: soilMeasure,
+      sensorMeasure: sensorMeasure,
     );
   }
 }

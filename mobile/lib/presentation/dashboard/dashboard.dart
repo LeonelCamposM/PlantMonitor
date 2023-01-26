@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/domain/soil_meassure.dart';
+import 'package:mobile/domain/sensor_measure.dart';
 import 'package:mobile/presentation/dashboard/percentage_widget.dart';
 
 // ignore: must_be_immutable
 class Dashboard extends StatelessWidget {
-  Dashboard({super.key, required this.soilMeasure});
-  SoilMeasure soilMeasure;
+  Dashboard({super.key, required this.sensorMeasure});
+  SensorMeasure sensorMeasure;
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +15,12 @@ class Dashboard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           PercentageWidget(
-            percentaje: soilMeasure.humidity.toDouble(),
+            percentaje: sensorMeasure.humidity.toDouble(),
             title: 'Humedad',
             barColor: Colors.lightBlue,
           ),
           PercentageWidget(
-            percentaje: soilMeasure.battery.toDouble(),
+            percentaje: sensorMeasure.battery.toDouble(),
             title: 'Batería',
             barColor: Colors.yellow,
           ),

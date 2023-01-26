@@ -1,11 +1,11 @@
-class SoilMeasure {
+class SensorMeasure {
   int humidity;
   String date;
   int battery;
 
-  SoilMeasure(this.humidity, this.date, this.battery);
+  SensorMeasure(this.humidity, this.date, this.battery);
 
-  factory SoilMeasure.fromJson(Map<dynamic, dynamic> json) => SoilMeasure(
+  factory SensorMeasure.fromJson(Map<dynamic, dynamic> json) => SensorMeasure(
         json['humidity'] as int,
         json['date'] as String,
         json['battery'] as int,

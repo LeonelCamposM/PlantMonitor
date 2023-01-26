@@ -1,7 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/infraestructure/ap_soil_moisture_widget.dart';
-import 'package:mobile/infraestructure/wifi_soil_moisture_widget.dart';
+import 'package:mobile/infraestructure/ap_sensor_measure_widget.dart';
+import 'package:mobile/infraestructure/wifi_sensor_measure_widget.dart';
 import 'package:mobile/presentation/sensor_configuration.dart/configuration_form.dart';
 
 enum NavigationState { home, configurationForm, wifiDashboard, apDashboard }
@@ -70,12 +70,12 @@ class _MyHomePageState extends State<MyHomePage> {
         page = const ConfigurationForm();
         break;
       case NavigationState.wifiDashboard:
-        page = Center(child: WifiSoilMoistureWidget());
+        page = Center(child: WifiSensorMeasureWidget());
         break;
       case NavigationState.apDashboard:
         page = Column(
           children: const [
-            APSoilMoistureWidget(),
+            APSensorMeasureWidget(),
           ],
         );
         break;
@@ -97,8 +97,8 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: "Configuración"),
-          BottomNavigationBarItem(icon: Icon(Icons.wifi), label: "wifi"),
-          BottomNavigationBarItem(icon: Icon(Icons.wifi_off), label: "ap"),
+          BottomNavigationBarItem(icon: Icon(Icons.wifi), label: "Wifi"),
+          BottomNavigationBarItem(icon: Icon(Icons.wifi_off), label: "AP"),
         ],
         onTap: (pagina) {
           setState(() {
