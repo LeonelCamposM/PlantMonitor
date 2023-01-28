@@ -1,6 +1,6 @@
 #include "WiFi.h"
-#define WIFI_MODE
-// #define AP_MODE
+// #define WIFI_MODE
+#define AP_MODE
 
 enum mode {READ, VIEW};
 mode boardMode;

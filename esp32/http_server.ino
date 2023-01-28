@@ -1,6 +1,7 @@
 #ifdef AP_MODE
 #include <WebServer.h>
 #include <ArduinoJson.h>
+#include "index.h"
 
 WebServer server(80);
 
@@ -30,8 +31,8 @@ void onGetSensorData() {
 }
 
 void onHome() {
-  const char* content = "<!DOCTYPE html><html><body><h1>My First Heading</h1><p>My first paragraph.</p></body></html>";
-  server.send(200, "text/html", content);
+  String s = MAIN_page;  
+  server.send(200, "text/html", s);
 }
 
 void startHttpServer(){
