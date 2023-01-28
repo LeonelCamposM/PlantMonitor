@@ -31,16 +31,15 @@ void onGetSensorData() {
 }
 
 void onHome() {
-  String s = MAIN_page;  
-  server.send(200, "text/html", s);
+  server.send(200, "text/html", HOME);
 }
 
 void startHttpServer(){
   server.on("/config", HTTP_POST, onConfig);
   server.on("/getSensorData", HTTP_GET, onGetSensorData);
   server.on("/", HTTP_GET, onHome);
-  server.begin();
   Serial.println("Listening on 192.168.1.22:80");
+  server.begin();
 }
 
 void serverHandleClient(){
