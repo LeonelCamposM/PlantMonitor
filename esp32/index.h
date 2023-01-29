@@ -11,14 +11,14 @@ const char HOME[] PROGMEM = R"=====(
 		    }
 
             .single-chart {
-            width: 33%;
+            width: 100%;
             justify-content: space-around ;
             }
 
             .circular-chart {
             display: block;
             margin: 10px auto;
-            max-width: 80%;
+            max-width: 100%;
             max-height: 250px;
             }
 
@@ -32,7 +32,6 @@ const char HOME[] PROGMEM = R"=====(
             fill: none;
             stroke-width: 2.8;
             stroke-linecap: round;
-          
             }
 
             @keyframes progress {
@@ -74,9 +73,10 @@ const char HOME[] PROGMEM = R"=====(
             var relativeHumidity = 0;
             var periodicCheck;
 
-            updateCharts("86", "8");
+            updateCharts("80", "38");
             function updateCharts(batteryPercentage, humidityPercenage) {
                 var svg = `
+                <h1 align = center> Batería</h1>
                 <svg viewBox="0 0 36 36" class="circular-chart yellow">
                     <path  class="circle-bg"
                     d="M18 2.0845
@@ -94,6 +94,7 @@ const char HOME[] PROGMEM = R"=====(
                 document.getElementById("battery-svg").innerHTML= svg;
 
                 var svg = `
+                <h1 align = center> Humedad</h1>
                 <svg viewBox="0 0 36 36" class="circular-chart blue">
                     <path  class="circle-bg"
                     d="M18 2.0845

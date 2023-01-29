@@ -10,14 +10,14 @@
 		    }
 
             .single-chart {
-            width: 33%;
+            width: 100%;
             justify-content: space-around ;
             }
 
             .circular-chart {
             display: block;
             margin: 10px auto;
-            max-width: 80%;
+            max-width: 100%;
             max-height: 250px;
             }
 
@@ -72,9 +72,10 @@
             var relativeHumidity = 0;
             var periodicCheck;
 
-            updateCharts("80", "78");
+            updateCharts("80", "38");
             function updateCharts(batteryPercentage, humidityPercenage) {
                 var svg = `
+                <h1 align = center> Batería</h1>
                 <svg viewBox="0 0 36 36" class="circular-chart yellow">
                     <path  class="circle-bg"
                     d="M18 2.0845
@@ -92,6 +93,7 @@
                 document.getElementById("battery-svg").innerHTML= svg;
 
                 var svg = `
+                <h1 align = center> Humedad</h1>
                 <svg viewBox="0 0 36 36" class="circular-chart blue">
                     <path  class="circle-bg"
                     d="M18 2.0845
