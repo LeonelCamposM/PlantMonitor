@@ -31,19 +31,17 @@ void firebaseInit(){
 }
 
 void updateWifiMeasurements() {
-  if(!startAxp192()) {
-    setChargeLed(false);
-    int moisture = getMoisturePercentage();
-    int battery = getBatteryPercentage();
-    WiFi.mode(WIFI_STA);
-    startWifiConnection();
-    firebaseInit();
-    Firebase.setInt(firebaseData, "/users/208210896/humidity", moisture);
-    Firebase.setInt(firebaseData, "/users/208210896/battery", battery);
-    Firebase.end(firebaseData);
-    WiFi.disconnect();
-    setChargeLed(true);
-    ESP.restart();
-  }
+  setChargeLed(false);
+  int moisture = getMoisturePercentage();
+  int battery = getBatteryPercentage();
+  WiFi.mode(WIFI_STA);
+  startWifiConnection();
+  firebaseInit();
+  Firebase.setInt(firebaseData, "/users/208210896/humidity", moisture);
+  Firebase.setInt(firebaseData, "/users/208210896/battery", battery);
+  Firebase.end(firebaseData);
+  WiFi.disconnect();
+  setChargeLed(true);
+  ESP.restart();
 }
 #endif

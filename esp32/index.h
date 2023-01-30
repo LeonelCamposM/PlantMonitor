@@ -54,14 +54,39 @@ const char HOME[] PROGMEM = R"=====(
             font-size: 0.5em;
             text-anchor: middle;
             }
+
+            .card {
+            
+                box-shadow: 0 8px 10px 0 rgba(0,0,0,0.2);
+                transition: 0.3s;
+                border-radius: 30px; 
+                margin: auto;
+                width: fit-content;
+            }
+            .container {
+                padding: 9px 12px;
+            }
         </style>
     </head>
     
     <body>
-        <div class="flex-wrapper">
-            <div id="battery-svg" class="single-chart">
-            </div>  
-        </div>   
+        <div class="card">
+            <div class="container">
+                <div class="flex-wrapper">
+                    <div id="battery-svg" class="single-chart">
+                    </div>  
+                </div>  
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="container">
+            <div class="flex-wrapper">
+                <div id="battery-svg" class="single-chart">
+                </div>  
+            </div>   
+        </div>
+
 
         <div class="flex-wrapper">
             <div id="humidity-svg" class="single-chart">
@@ -73,10 +98,10 @@ const char HOME[] PROGMEM = R"=====(
             var relativeHumidity = 0;
             var periodicCheck;
 
-            updateCharts("80", "38");
+            updateCharts("80", "39");
             function updateCharts(batteryPercentage, humidityPercenage) {
                 var svg = `
-                <h1 align = center> Batería</h1>
+                <h1 align = center>&nbsp&nbsp&nbsp&nbsp&nbsp&nbspBatería&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</h1>
                 <svg viewBox="0 0 36 36" class="circular-chart yellow">
                     <path  class="circle-bg"
                     d="M18 2.0845
@@ -94,7 +119,7 @@ const char HOME[] PROGMEM = R"=====(
                 document.getElementById("battery-svg").innerHTML= svg;
 
                 var svg = `
-                <h1 align = center> Humedad</h1>
+                <h1 align = center>&nbsp&nbsp&nbsp&nbsp&nbspHumedad&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</h1>
                 <svg viewBox="0 0 36 36" class="circular-chart blue">
                     <path  class="circle-bg"
                     d="M18 2.0845

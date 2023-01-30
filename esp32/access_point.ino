@@ -21,7 +21,7 @@ void stopAccesPoint(){
 }
 
 void setupAPMode(){
-  if(!startAxp192() && !initMemory()) {
+  if(!initMemory()) {
     boardMode = getCurrentMode();
     switch (boardMode) {
       case READ: {
@@ -30,7 +30,7 @@ void setupAPMode(){
       } break;
       case VIEW: {
         Serial.println("AP MODE");
-        setChargeLed(true);
+       // setChargeLed(true);
         startAccesPoint();
         startHttpServer();
       } break;
@@ -41,7 +41,7 @@ void setupAPMode(){
 void updateAPMeasurements(){
   switch (boardMode) {
     case READ: {
-      // appendMeasure(getMoisturePercentage());
+      getBatteryPercentage();
       delay(9000);
     } break;
     case VIEW: {

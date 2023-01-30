@@ -8,6 +8,8 @@ bool startAxp192() {
   if(axp.begin(Wire, AXP192_SLAVE_ADDRESS) == AXP_FAIL) {
     Serial.println(F("failed to initialize communication with AXP192"));
     error = true;
+  }else{
+    setChargeValues();
   }
   return error;
 }
@@ -16,6 +18,10 @@ void setChargeValues() {
   axp.setChargeControlCur(AXP1XX_CHARGE_CUR_550MA);
   axp.setChargingTargetVoltage(AXP202_TARGET_VOL_4_2V);
   axp.enableChargeing(true);
+}
+
+void stopCharging() {
+  axp.enableChargeing(false);
 }
 
 void setChargeLed(bool value ) {
@@ -30,7 +36,7 @@ int getBatteryPercentage() {
   Serial.println("Battery:");
   Serial.print(axp.getBattVoltage());
   Serial.println(" mV");
-  int percentageBattery = map(axp.getBattVoltage(), 4000, 2030, 100, 0);
+  int percentageBattery = map(axp.getBattVoltage(), 4200, 2030, 100, 0);
   if(percentageBattery < 0) {
     percentageBattery = 0;
   }
@@ -38,4 +44,8 @@ int getBatteryPercentage() {
     percentageBattery = 100;
   }
   return percentageBattery;
+}
+
+int getBatteryVoltage(){
+  return axp.getBattVoltage();
 }
