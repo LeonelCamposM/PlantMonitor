@@ -12,17 +12,18 @@ void toggleMode() {
   EEPROM.commit();
 }
 
-mode getCurrentMode() {
-  mode currentMode = READ;
-  modeIdx = EEPROM.read(modeAddr);
-  toggleMode();
-  if(modeIdx != 0) {
-    currentMode = READ;
-  }else {
-    currentMode = VIEW;
-  }
-  return currentMode;
-}
+// mode getCurrentMode() {
+//   mode currentMode = READ;
+//   modeIdx = EEPROM.read(modeAddr);
+//   Serial.println(F("mode "+modeIdx));
+//   toggleMode();
+//   if(modeIdx != 0) {
+//     currentMode = READ;
+//   }else {
+//     currentMode = VIEW;
+//   }
+//   return currentMode;
+// }
 
 bool initMemory() {
   bool error = false;
@@ -31,11 +32,11 @@ bool initMemory() {
     error = true;
   }
 
-  Serial.println("Memory: ");
-  for (int i = 0; i < MEASURES_SIZE +2; i++) {
-    Serial.print(EEPROM.read(i));
-    Serial.print(", ");
-  }
+  // Serial.println("Memory: ");
+  // for (int i = 0; i < MEASURES_SIZE +2; i++) {
+  //   Serial.print(EEPROM.read(i));
+  //   Serial.print(", ");
+  // }
   return error;
 }
 

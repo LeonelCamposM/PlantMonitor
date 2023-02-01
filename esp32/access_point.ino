@@ -5,7 +5,9 @@ IPAddress local_IP(192,168,1,22);
 IPAddress gateway(192,168,1,5);
 IPAddress subnet(255,255,255,0);
 
-void startAccesPoint() {
+void startAccesPoint(){
+  WiFi.disconnect(false);
+  WiFi.mode(WIFI_AP);
   Serial.print("Setting up Access Point ... ");
   Serial.println(WiFi.softAPConfig(local_IP, gateway, subnet) ? "Ready" : "Failed!");
 
@@ -21,33 +23,14 @@ void stopAccesPoint(){
 }
 
 void setupAPMode(){
-  if(!initMemory()) {
-    boardMode = getCurrentMode();
-    switch (boardMode) {
-      case READ: {
-        Serial.println("READ MODE");
-        setChargeLed(false);
-      } break;
-      case VIEW: {
-        Serial.println("AP MODE");
-       // setChargeLed(true);
-        startAccesPoint();
-        startHttpServer();
-      } break;
-    }
-  }
+  setChargeLed(true);
+  Serial.println("AP MODE");
+  startAccesPoint();
+  startHttpServer();
 }
 
 void updateAPMeasurements(){
-  switch (boardMode) {
-    case READ: {
-      getBatteryPercentage();
-      delay(9000);
-    } break;
-    case VIEW: {
-      serverHandleClient(); 
-      delay(1);
-    } break;
-  }
+  serverHandleClient(); 
+  delay(1);
 }
 #endif

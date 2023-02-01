@@ -11,7 +11,7 @@ class Dashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: Row(
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           PercentageWidget(

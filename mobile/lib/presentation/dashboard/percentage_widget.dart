@@ -40,7 +40,7 @@ class PercentageWidget extends StatelessWidget {
             child: CircularPercentIndicator(
               animation: true,
               animationDuration: 1000,
-              radius: 80.0,
+              radius: 90.0,
               lineWidth: 25,
               percent: percentaje / 100,
               progressColor: barColor,
