@@ -45,8 +45,8 @@ void setup() {
   delay(1000);
 
   if(!startAxp192()) {
-    //xTaskCreate(batteryMonitorTask, "BatteryMonitorTask", 2048, NULL, 1, NULL);
-    stopCharging();
+    setChargeValues();
+    xTaskCreate(batteryMonitorTask, "BatteryMonitorTask", 2048, NULL, 1, NULL);
     touchAttachInterrupt(T2, callback, 30);
     esp_sleep_enable_touchpad_wakeup();
 
@@ -70,7 +70,7 @@ void setup() {
         setChargeLed(false);
         WiFi.disconnect(true);
         WiFi.mode(WIFI_OFF);
-        esp_deep_sleep_start()
+        esp_deep_sleep_start();
       break;
     }
   }

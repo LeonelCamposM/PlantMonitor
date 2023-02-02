@@ -95,7 +95,11 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case NavigationState.configurationForm:
         changeTitle("Configuraciones del sensor");
-        page = const ConfigurationForm();
+        page = Column(
+          children: const [
+            ConfigurationForm(),
+          ],
+        );
         break;
       case NavigationState.wifiDashboard:
         if (route == "sensors") {

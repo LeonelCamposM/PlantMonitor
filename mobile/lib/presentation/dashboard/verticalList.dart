@@ -1,6 +1,7 @@
 // @param messages: Player messages in order
 // @param icons: Player images in order
 // @return Container with vertical list chat view
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/domain/measure.dart';
 import 'package:mobile/domain/sensor.dart';
@@ -8,9 +9,20 @@ import 'package:mobile/presentation/core/size_config.dart';
 import 'package:mobile/presentation/dashboard/dashboard.dart';
 
 Widget getSensorVerticalList(List<Sensor> userSensors, context, callback) {
+  double height = 0;
+  double width = 0;
+
+  if (SizeConfig.blockSizeHorizontal > 9.15) {
+    height = SizeConfig.blockSizeVertical * 90;
+    width = SizeConfig.blockSizeHorizontal * 30;
+  } else {
+    height = SizeConfig.blockSizeVertical * 90;
+    width = SizeConfig.blockSizeHorizontal * 80;
+  }
+
   return SizedBox(
-    height: SizeConfig.blockSizeVertical * 90,
-    width: SizeConfig.blockSizeHorizontal * 50,
+    height: height,
+    width: width,
     child: ListView(
         reverse: false,
         scrollDirection: Axis.vertical,
@@ -59,11 +71,11 @@ Widget getSensorVerticalList(List<Sensor> userSensors, context, callback) {
                                       width: SizeConfig.blockSizeVertical * 40,
                                     ),
                                     Text(
-                                      "Fecha : ${userSensors[index].date}",
+                                      "Fecha: ${userSensors[index].date}",
                                       style: const TextStyle(fontSize: 20),
                                     ),
                                     Text(
-                                      "Hora : ${userSensors[index].time}",
+                                      "Hora: ${userSensors[index].time}",
                                       style: const TextStyle(fontSize: 20),
                                     ),
                                   ],
@@ -92,22 +104,32 @@ Widget getSensorVerticalList(List<Sensor> userSensors, context, callback) {
 }
 
 Widget getSensorHorizontalList(List<Measure> sensorsMeassures) {
+  double height = SizeConfig.blockSizeVertical * 100;
+  double width = SizeConfig.blockSizeHorizontal * 60;
+
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: SizedBox(
-      height: SizeConfig.blockSizeVertical * 85,
-      width: SizeConfig.blockSizeHorizontal * 60,
+      height: height,
+      width: width,
       child: ListView(
           scrollDirection: Axis.vertical,
           children: List.generate(
             sensorsMeassures.length,
             (index) => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                sensorsMeassures[index].value is double
-                    ? CircularChartCard(
-                        sensorMeasure: sensorsMeassures[index],
-                      )
-                    : const Text("")
+                kIsWeb == true
+                    ? sensorsMeassures[index].value is double
+                        ? CircularChartCard(
+                            sensorMeasure: sensorsMeassures[index],
+                          )
+                        : const Text("")
+                    : sensorsMeassures[index].value is double
+                        ? const Text("")
+                        : CircularChartCard(
+                            sensorMeasure: sensorsMeassures[index],
+                          )
               ],
             ),
           )),
