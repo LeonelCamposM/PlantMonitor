@@ -1,11 +1,12 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/infraestructure/ap_sensor_measure_widget.dart';
 import 'package:mobile/infraestructure/fcm_repo.dart';
 import 'package:mobile/infraestructure/wifi_sensor_measure_widget.dart';
+import 'package:mobile/presentation/core/size_config.dart';
+import 'package:mobile/presentation/dashboard/verticalList.dart';
 import 'package:mobile/presentation/sensor_configuration/configuration_form.dart';
 
-enum NavigationState { home, wifiDashboard, configurationForm, apDashboard }
+enum NavigationState { home, wifiDashboard, configurationForm }
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -35,6 +36,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   NavigationState navState = NavigationState.home;
+  String route = "sensors";
+  dynamic args;
+
+  callback(String route, dynamic args) {
+    setState(() {
+      this.route = route;
+      this.args = args;
+    });
+  }
 
   @override
   void initState() {
@@ -60,11 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
     String? token = await fcm.getToken();
     print(token);
     fcm.sendPushMessage(token!, "notificacion post", "nueva");
-    print("done");
-    print("done");
-    print("done");
-    print("done");
-    print("done");
   }
 
   void changeTitle(String title) {
@@ -73,51 +78,19 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void enableBack() {}
+
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     Widget page;
 
     switch (navState) {
       case NavigationState.home:
         changeTitle("Resumen de mediciones");
-        page = Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Center(
-              child: Column(
-            children: [
-              Card(
-                elevation: 10,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text("Sensor de chayotes",
-                          style: TextStyle(fontSize: 25)),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.battery_2_bar),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text("La batería está por acabarse"),
-                          ],
-                        )),
-                  ],
-                ),
-              ),
-            ],
-          )),
+        page = const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Center(child: Text("home")),
         );
         break;
       case NavigationState.configurationForm:
@@ -125,27 +98,41 @@ class _MyHomePageState extends State<MyHomePage> {
         page = const ConfigurationForm();
         break;
       case NavigationState.wifiDashboard:
-        changeTitle("Mediciones del sensor");
-        page = Center(child: WifiSensorMeasureWidget());
-        break;
-      case NavigationState.apDashboard:
-        page = Column(
-          children: const [
-            APSensorMeasureWidget(),
-          ],
-        );
+        if (route == "sensors") {
+          changeTitle("Sensores activos");
+        } else {
+          changeTitle("Mediciones del sensor");
+        }
+
+        page = route == "sensors"
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(child: WifiSensorMeasureWidget(callback: callback)),
+                ],
+              )
+            : page = Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Center(child: getSensorHorizontalList(args)),
+                ],
+              );
         break;
     }
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Column(
-        children: [
-          page,
-        ],
-      ),
+      appBar: route == "measures"
+          ? AppBar(
+              title: Text(widget.title),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => {callback("sensors", null)},
+              ),
+            )
+          : AppBar(
+              title: Text(widget.title),
+            ),
+      body: page,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: navState.index,
@@ -154,9 +141,11 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.sensors), label: "Sensores"),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings), label: "Configuración"),
-          // BottomNavigationBarItem(icon: Icon(Icons.wifi_off), label: "AP"),
         ],
         onTap: (pagina) {
+          if (NavigationState.values[pagina] == NavigationState.home) {
+            route = "sensors";
+          }
           setState(() {
             navState = NavigationState.values[pagina];
           });

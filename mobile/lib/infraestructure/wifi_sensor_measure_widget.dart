@@ -1,23 +1,49 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/domain/sensor_measure.dart';
-import 'package:mobile/presentation/dashboard/dashboard.dart';
+import 'package:mobile/domain/measure.dart';
+import 'package:mobile/domain/sensor.dart';
+import 'package:mobile/presentation/dashboard/verticalList.dart';
+import 'package:mobile/presentation/home.dart';
 
 // ignore: must_be_immutable
 class WifiSensorMeasureWidget extends StatelessWidget {
-  WifiSensorMeasureWidget({Key? key}) : super(key: key);
-  SensorMeasure sensorMeasure = SensorMeasure(0, "", 0);
+  WifiSensorMeasureWidget({Key? key, required this.callback}) : super(key: key);
+  Sensor sensor = Sensor(<Measure>[], "", "", "");
   DatabaseReference starCountRef =
-      FirebaseDatabase.instance.ref("users/208210896");
+      FirebaseDatabase.instance.ref("users/leonel");
+  final Function callback;
 
-  SensorMeasure getUpdatedValue(AsyncSnapshot<DatabaseEvent> snapshot) {
-    SensorMeasure sensorMeasure = SensorMeasure(0, "", 0);
+  List<Sensor> getUpdatedValue(AsyncSnapshot<DatabaseEvent> snapshot) {
+    List<Sensor> userSensors = [];
+    String date = "";
+    String time = "";
     if (snapshot.hasData) {
       Map<dynamic, dynamic> map =
           snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
-      sensorMeasure = SensorMeasure.fromJson(map);
+      for (dynamic key in map.keys) {
+        List<Measure> measures = [];
+        Map<dynamic, dynamic> mapMeasures = map[key] as Map<dynamic, dynamic>;
+        for (dynamic measureKey in mapMeasures.keys) {
+          if (measureKey == "Fecha") {
+            date = mapMeasures[measureKey];
+          }
+          switch (measureKey) {
+            case "Fecha":
+              date = mapMeasures[measureKey];
+              break;
+            case "Hora":
+              time = mapMeasures[measureKey];
+              break;
+            default:
+              measures.add(Measure(measureKey, mapMeasures[measureKey]));
+              break;
+          }
+        }
+
+        userSensors.add(Sensor(measures, key, date, time));
+      }
     }
-    return sensorMeasure;
+    return userSensors;
   }
 
   @override
@@ -32,10 +58,12 @@ class WifiSensorMeasureWidget extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('');
         }
-        SensorMeasure newValue = getUpdatedValue(snapshot);
-        sensorMeasure = newValue;
 
-        return Dashboard(sensorMeasure: sensorMeasure);
+        List<Sensor> newValue = getUpdatedValue(snapshot);
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: getSensorVerticalList(newValue, context, callback),
+        );
       },
     );
   }

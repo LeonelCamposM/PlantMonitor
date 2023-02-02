@@ -70,7 +70,7 @@ void setup() {
         setChargeLed(false);
         WiFi.disconnect(true);
         WiFi.mode(WIFI_OFF);
-        esp_deep_sleep_start();
+        esp_deep_sleep_start()
       break;
     }
   }
