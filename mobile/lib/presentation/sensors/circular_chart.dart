@@ -72,7 +72,7 @@ class PercentageWidget extends StatelessWidget {
           // ignore: prefer_const_constructors
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: getTitleText(title),
+            child: getTitleText(title, false),
           ),
           const SizedBox(
             height: 10,
@@ -87,7 +87,7 @@ class PercentageWidget extends StatelessWidget {
               percent: percentaje / 100,
               progressColor: barColor,
               circularStrokeCap: CircularStrokeCap.round,
-              center: getTitleText("$text%"),
+              center: getTitleText("$text%", false),
             ),
           ),
         ],

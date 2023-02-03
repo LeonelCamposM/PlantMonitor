@@ -4,7 +4,8 @@ import 'package:mobile/infraestructure/fcm_repo.dart';
 import 'package:mobile/infraestructure/wifi_sensor_measure_widget.dart';
 import 'package:mobile/presentation/core/size_config.dart';
 import 'package:mobile/presentation/sensors/measures_list.dart';
-import 'package:mobile/presentation/settings/configuration_form.dart';
+import 'package:mobile/presentation/register/configuration_form.dart';
+import 'package:mobile/presentation/settings/settings.dart';
 
 enum NavigationState { home, wifiDashboard, configurationForm }
 
@@ -95,8 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
       case NavigationState.configurationForm:
         changeTitle("Configuración de alertas");
         page = Column(
-          children: const [
-            ConfigurationForm(),
+          children: [
+            AlertSettings(),
           ],
         );
         break;
@@ -146,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
           BottomNavigationBarItem(icon: Icon(Icons.sensors), label: "Sensores"),
           BottomNavigationBarItem(
-              icon: Icon(Icons.settings), label: "Configuración"),
+              icon: Icon(Icons.notifications_active), label: "Alertas"),
         ],
         onTap: (pagina) {
           if (NavigationState.values[pagina] == NavigationState.home) {

@@ -22,8 +22,8 @@ class SensorList extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  getTitleText("Sensor: "),
-                  getTitleText(userSensors[index].name)
+                  getTitleText("Sensor: ", true),
+                  getTitleText(userSensors[index].name, true)
                 ],
               ),
               SizedBox(
@@ -36,15 +36,13 @@ class SensorList extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      getBodyText("Detalles de último reporte: "),
+                      getBodyText("Último reporte: ", true),
                       SizedBox(
-                        height: SizeConfig.blockSizeVertical * 3,
+                        height: SizeConfig.blockSizeVertical * 1,
                         width: SizeConfig.blockSizeVertical * 40,
                       ),
-                      getBodyText("Fecha: ${userSensors[index].date}"),
-                      getBodyText(
-                        "Hora: ${userSensors[index].time}",
-                      ),
+                      getBodyText("Fecha: ${userSensors[index].date}", false),
+                      getBodyText("Hora: ${userSensors[index].time}", false),
                     ],
                   ),
                 ],
