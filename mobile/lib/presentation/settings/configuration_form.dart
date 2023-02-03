@@ -1,7 +1,7 @@
 // ignore: must_be_immutable
 import 'package:flutter/material.dart';
 import 'package:mobile/domain/esp32_settings.dart';
-import 'package:mobile/presentation/sensor_configuration/steps/steps.dart';
+import 'package:mobile/presentation/settings/steps/steps.dart';
 import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable

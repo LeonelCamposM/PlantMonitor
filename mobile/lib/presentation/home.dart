@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/infraestructure/fcm_repo.dart';
 import 'package:mobile/infraestructure/wifi_sensor_measure_widget.dart';
 import 'package:mobile/presentation/core/size_config.dart';
-import 'package:mobile/presentation/dashboard/verticalList.dart';
-import 'package:mobile/presentation/sensor_configuration/configuration_form.dart';
+import 'package:mobile/presentation/sensors/measures_list.dart';
+import 'package:mobile/presentation/settings/configuration_form.dart';
 
 enum NavigationState { home, wifiDashboard, configurationForm }
 
@@ -24,6 +24,7 @@ class Home extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class MyHomePage extends StatefulWidget {
   MyHomePage({
     super.key,
@@ -58,7 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void showFlutterNotification(RemoteMessage message) {
     RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
     showModalBottomSheet(
         context: context,
         builder: ((context) {
@@ -68,7 +68,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void sendMessage(FirebaseMessagingRepo fcm) async {
     String? token = await fcm.getToken();
-    print(token);
     fcm.sendPushMessage(token!, "notificacion post", "nueva");
   }
 
@@ -94,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
         );
         break;
       case NavigationState.configurationForm:
-        changeTitle("Configuraciones del sensor");
+        changeTitle("Configuración de alertas");
         page = Column(
           children: const [
             ConfigurationForm(),
@@ -118,7 +117,10 @@ class _MyHomePageState extends State<MyHomePage> {
             : page = Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Center(child: getSensorHorizontalList(args)),
+                  Center(
+                      child: MeasuresList(
+                    sensorMeasures: args,
+                  )),
                 ],
               );
         break;

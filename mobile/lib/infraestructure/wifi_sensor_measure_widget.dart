@@ -2,8 +2,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/domain/measure.dart';
 import 'package:mobile/domain/sensor.dart';
-import 'package:mobile/presentation/dashboard/verticalList.dart';
-import 'package:mobile/presentation/home.dart';
+import 'package:mobile/presentation/sensors/sensor_list.dart';
 
 // ignore: must_be_immutable
 class WifiSensorMeasureWidget extends StatelessWidget {
@@ -62,7 +61,10 @@ class WifiSensorMeasureWidget extends StatelessWidget {
         List<Sensor> newValue = getUpdatedValue(snapshot);
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: getSensorVerticalList(newValue, context, callback),
+          child: SensorList(
+            callback: callback,
+            userSensors: newValue,
+          ),
         );
       },
     );
