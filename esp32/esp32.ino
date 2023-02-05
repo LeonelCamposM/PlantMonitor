@@ -1,43 +1,20 @@
 #include "WiFi.h"
-// #define WIFI_MODE
-#define AP_MODE
+#define WIFI_MODE
 
-void batteryMonitorTask(void *pvParameter) {
-  while (1) {
-    if (getBatteryVoltage() >= 4100) {
-      Serial.println("charged");
-      stopCharging();
-    }
-    if(getBatteryVoltage() <= 2600){
-      Serial.println("charging");
-      setChargeValues();
-    }
-    vTaskDelay(40000 / portTICK_PERIOD_MS);
-  }
-}
+// #define AP_MODE
+
+#define uS_TO_S_FACTOR 1000000
+#define TIME_TO_SLEEP  10   
 
 void callback(){
 }
 
-int print_wakeup_reason(){
-  esp_sleep_wakeup_cause_t wakeup_reason;
-  int reason_id = 0;
-
-  wakeup_reason = esp_sleep_get_wakeup_cause();
-
-  switch(wakeup_reason)
-  {
-    case ESP_SLEEP_WAKEUP_TIMER : Serial.println("Wakeup caused by timer");
-      reason_id = 1;
-      break;
-    case ESP_SLEEP_WAKEUP_TOUCHPAD : Serial.println("Wakeup caused by touchpad"); 
-      reason_id = 2;
-      break;
-    default : Serial.printf("Wakeup was not caused by deep sleep: %d\n",wakeup_reason); 
-      reason_id = 0;
-      break;
-  }
-  return reason_id;
+void goToSleep(){
+  Serial.println("Going to deep sleep with: ");
+  setChargeLed(false);
+  WiFi.disconnect(true);
+  WiFi.mode(WIFI_OFF);
+  esp_deep_sleep_start();
 }
 
 void setup() {
@@ -45,32 +22,34 @@ void setup() {
   delay(1000);
 
   if(!startAxp192()) {
-    setChargeValues();
-    xTaskCreate(batteryMonitorTask, "BatteryMonitorTask", 2048, NULL, 1, NULL);
-    touchAttachInterrupt(T2, callback, 30);
-    esp_sleep_enable_touchpad_wakeup();
+    getBatteryPercentage();
+
+    #ifdef WIFI_MODE
+      esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
+    #else
+      touchAttachInterrupt(T2, callback, 70);
+      esp_sleep_enable_touchpad_wakeup();
+    #endif
 
     esp_sleep_wakeup_cause_t wakeup_reason;
     wakeup_reason = esp_sleep_get_wakeup_cause();
     switch(wakeup_reason)
     {
+      #ifdef AP_MODE
       case ESP_SLEEP_WAKEUP_TOUCHPAD : 
         Serial.println("Wakeup caused by touchpad"); 
-        getBatteryPercentage();
-        #ifdef WIFI_MODE
-        updateWifiMeasurements();
-        #else
         setupAPMode();
-        #endif
+      break;
+      #endif
+      
+      case ESP_SLEEP_WAKEUP_TIMER :
+        Serial.println("Wakeup caused by timer"); 
+        updateWifiMeasurements();
+        goToSleep();
       break;
 
       default : 
-        Serial.println("Going to deep sleep with: ");
-        getBatteryPercentage();
-        setChargeLed(false);
-        WiFi.disconnect(true);
-        WiFi.mode(WIFI_OFF);
-        esp_deep_sleep_start();
+        goToSleep();
       break;
     }
   }
