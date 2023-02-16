@@ -100,3 +100,7 @@ void sendLora(String message){
   LoRa.endPacket();
 }
 
+void sleepLora(){
+  LoRa.sleep();
+}
+

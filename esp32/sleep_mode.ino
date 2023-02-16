@@ -1,18 +1,18 @@
 #define uS_TO_S_FACTOR 1000000
-#define TIME_TO_SLEEP  10   
+#define TIME_TO_SLEEP  60
 int counter = 0;
 
 void goToSleep(){
-  Serial.println("Going to deep sleep with: ");
-  // setChargeLed(false);
-  WiFi.disconnect(true);
-  WiFi.mode(WIFI_OFF);
+  Serial.println("Going to deep sleep");
+  esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_OFF);
+  esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_SLOW_MEM, ESP_PD_OPTION_OFF);
+  esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_FAST_MEM, ESP_PD_OPTION_OFF);
   esp_deep_sleep_start();
-}
+} 
 
 void sensorNodeDeepSleep(){
-  if(!startLora()){
-    esp_sleep_enable_timer_wakeup(120 * uS_TO_S_FACTOR);   
+  if(!startLora() && !startAxp192()){
+    esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);   
     esp_sleep_wakeup_cause_t wakeup_reason;
     wakeup_reason = esp_sleep_get_wakeup_cause();
     String number = "";
@@ -22,18 +22,19 @@ void sensorNodeDeepSleep(){
     {
       case ESP_SLEEP_WAKEUP_TIMER :
         Serial.println("Wakeup caused by timer sending lora random"); 
-        number = String(random(1,100));
-        ackSendLora("Datos: " + number);
+        number = String(getBatteryPercentage());
+        ackSendLora("batt: " + number+ "moist: " + String(getMoisturePercentage()));
+        sleepLora();
         goToSleep();
       break;
 
       default : 
+        getBatteryPercentage();
         goToSleep();
       break;
     }
   }
 }
-
 
 void listenLoraRequest(){
   while (true){
@@ -53,14 +54,15 @@ void serverNodeDeepSleep(){
     wakeup_reason = esp_sleep_get_wakeup_cause();
     switch(wakeup_reason)
     {
-      case ESP_SLEEP_WAKEUP_TIMER : 
+      case ESP_SLEEP_WAKEUP_TIMER: 
         Serial.println("Wakeup caused by timer Listening for lora sensors");
-        setChargeLed(true);
+        setChargeLed(false);
         listenLoraRequest();
         Serial.println("Done listening");
       break;
 
-      default : 
+      default: 
+        setChargeLed(false);
         goToSleep();
       break;
     }

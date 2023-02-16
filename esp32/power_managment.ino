@@ -15,6 +15,7 @@ bool startAxp192() {
       Serial.println(F("failed to turn off GPS module"));
     }
     setChargeValues();
+    setChargeLed(false);
   }
   return error;
 }
@@ -50,7 +51,7 @@ int getBatteryPercentage() {
   }
   return percentageBattery;
 }
-
+0
 int getBatteryVoltage(){
   return axp.getBattVoltage();
 }
