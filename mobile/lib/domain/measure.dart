@@ -1,16 +1,16 @@
 class Measure {
-  String name;
-  dynamic value;
+  int humidity;
+  int battery;
 
-  Measure(this.name, this.value);
+  Measure(this.humidity, this.battery);
 
   factory Measure.fromJson(Map<dynamic, dynamic> json) => Measure(
-        json['value'] as dynamic,
-        json['name'] as String,
+        json['humidity'] as int,
+        json['battery'] as int,
       );
 
   Map<dynamic, dynamic> toJson() => {
-        'value': value,
-        'name': name,
+        'humidity': humidity,
+        'battery': battery,
       };
 }

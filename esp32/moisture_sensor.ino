@@ -11,10 +11,12 @@ int getMoisturePercentage() {
   if(percentageHumidity > 100) {
     percentageHumidity = 100;
   }
+  #ifdef DEBUG
   Serial.print("Moisture: "); 
   Serial.print(sensorValue); 
   Serial.print(" percentage: ");
   Serial.print(percentageHumidity);
   Serial.println("");
+  #endif
   return percentageHumidity;
 }

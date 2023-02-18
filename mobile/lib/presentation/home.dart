@@ -76,31 +76,6 @@ class _MyHomePageState extends State<MyHomePage> {
         );
         break;
     }
-    //   case NavigationState.wifiDashboard:
-    //     if (route == "sensors") {
-    //       changeTitle("Sensores activos");
-    //     } else {
-    //       changeTitle("Mediciones del sensor");
-    //     }
-
-    //     page = route == "sensors"
-    //         ? Row(
-    //             mainAxisAlignment: MainAxisAlignment.center,
-    //             children: [
-    //               Center(child: WifiSensorMeasureWidget(callback: callback)),
-    //             ],
-    //           )
-    //         : page = Row(
-    //             mainAxisAlignment: MainAxisAlignment.center,
-    //             children: [
-    //               Center(
-    //                   child: MeasuresList(
-    //                 sensorMeasures: args,
-    //               )),
-    //             ],
-    //           );
-    //     break;
-    // }
 
     return Scaffold(
       appBar: route == "measures"
@@ -120,14 +95,10 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: navState.index,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
-          // BottomNavigationBarItem(icon: Icon(Icons.sensors), label: "Sensores"),
           BottomNavigationBarItem(
               icon: Icon(Icons.notifications_active), label: "Alertas"),
         ],
         onTap: (pagina) {
-          if (NavigationState.values[pagina] == NavigationState.home) {
-            route = "sensors";
-          }
           setState(() {
             navState = NavigationState.values[pagina];
           });

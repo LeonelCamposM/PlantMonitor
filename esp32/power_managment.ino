@@ -6,13 +6,19 @@ bool startAxp192() {
   bool error = false;
   Wire.begin(21, 22);
   if(axp.begin(Wire, AXP192_SLAVE_ADDRESS) == AXP_FAIL) {
+    #ifdef DEBUG
     Serial.println(F("failed to initialize communication with AXP192"));
     error = true;
+    #endif
   }else{
     if(axp.setPowerOutPut(AXP192_LDO3, AXP202_OFF) == AXP_PASS) {
-    Serial.println(F("turned off GPS module"));
+      #ifdef DEBUG
+      Serial.println(F("turned off GPS module"));
+      #endif
     } else {
+      #ifdef DEBUG
       Serial.println(F("failed to turn off GPS module"));
+      #endif
     }
     setChargeValues();
     setChargeLed(false);
@@ -39,9 +45,12 @@ void setChargeLed(bool value ) {
 }
 
 int getBatteryPercentage() {
+  #ifdef DEBUG
   Serial.println("Battery:");
   Serial.print(axp.getBattVoltage());
   Serial.println(" mV");
+  #endif
+  
   int percentageBattery = map(axp.getBattVoltage(), 4200, 2600, 100, 0);
   if(percentageBattery < 0) {
     percentageBattery = 0;
@@ -51,7 +60,7 @@ int getBatteryPercentage() {
   }
   return percentageBattery;
 }
-0
+
 int getBatteryVoltage(){
   return axp.getBattVoltage();
 }

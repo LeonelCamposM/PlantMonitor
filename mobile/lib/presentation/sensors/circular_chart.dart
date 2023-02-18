@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/domain/measure.dart';
-import 'package:mobile/presentation/core/size_config.dart';
 import 'package:mobile/presentation/core/text.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -16,29 +15,16 @@ class CircularChartCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          sensorMeasure.name == "Batería"
-              ? PercentageWidget(
-                  percentaje: sensorMeasure.value.toDouble(),
-                  title: sensorMeasure.name,
-                  barColor: Colors.yellow,
-                )
-              : sensorMeasure.name == "Humedad"
-                  ? PercentageWidget(
-                      percentaje: sensorMeasure.value.toDouble(),
-                      title: sensorMeasure.name,
-                      barColor: Colors.lightBlue,
-                    )
-                  : sensorMeasure.name == "Presión"
-                      ? PercentageWidget(
-                          percentaje: sensorMeasure.value.toDouble(),
-                          title: sensorMeasure.name,
-                          barColor: Colors.orangeAccent,
-                        )
-                      : PercentageWidget(
-                          percentaje: sensorMeasure.value.toDouble(),
-                          title: sensorMeasure.name,
-                          barColor: Colors.purple,
-                        ),
+          PercentageWidget(
+            percentaje: sensorMeasure.battery.toDouble(),
+            title: "Batería",
+            barColor: Colors.yellow,
+          ),
+          PercentageWidget(
+            percentaje: sensorMeasure.humidity.toDouble(),
+            title: "Humedad",
+            barColor: Colors.lightBlue,
+          )
         ],
       ),
     );

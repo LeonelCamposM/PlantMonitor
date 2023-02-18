@@ -1,26 +1,31 @@
 #include "WiFi.h"
-// #define Server_Node
-#define Sensor_Node
-#define WIFI_MODE
-
+#define DEBUG
 void setup() {
+  #ifdef DEBUG
   Serial.begin(115200);
   while (!Serial);
-  startAxp192();
-  // setChargeValues();
-  // setCpuFrequencyMhz(80);
-  // #ifdef Server_Node
-  //   //serverNodeDeepSleep();
-  // #else
-  //   // sensorNodeDeepSleep();
-  //   startWifiConnection();
-  //   updateWifiMeasurements();
-  //   sensorNodeDeepSleep();
-  // #endif
+  #endif
+  
+  
+  if(!startAxp192()){
+    #ifdef DEBUG
+    getBatteryPercentage();
+    #endif
+    
+    setupAPMode();
+    // esp_sleep_wakeup_cause_t wakeup_reason;
+    // wakeup_reason = esp_sleep_get_wakeup_cause();
+    // switch(wakeup_reason)
+    // {
+    //   default: 
+    //     setChargeLed(false);
+    //     goToSleep();
+    //   break;
+    // }
+  }
 }
 
 void loop() {
- getBatteryPercentage();
- delay(3000);
+  updateAPMeasurements();
 }
 

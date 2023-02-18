@@ -16,12 +16,12 @@ class APSensorMeasureWidget extends StatefulWidget {
 }
 
 class _APSensorMeasureWidgetState extends State<APSensorMeasureWidget> {
-  Measure sensorMeasure = Measure("", 50);
+  Measure sensorMeasure = Measure(0, 0);
   Timer? timer;
 
   void getUpdatedValue(String meassureName) async {
     final response = await http.get(
-      Uri.parse('http://192.168.1.22:80/getSensorData/$meassureName'),
+      Uri.parse('http://192.168.1.22:80/getSensorData'),
     );
     if (response.statusCode == 200) {
       Map map = json.decode(response.body);
@@ -33,7 +33,6 @@ class _APSensorMeasureWidgetState extends State<APSensorMeasureWidget> {
 
   @override
   void initState() {
-    sensorMeasure.name = widget.meassureName;
     getUpdatedValue(widget.meassureName);
     super.initState();
     timer = Timer.periodic(const Duration(seconds: 5),
