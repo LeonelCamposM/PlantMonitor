@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:mobile/infraestructure/fcm_repo.dart';
 import 'package:mobile/infraestructure/wifi_sensor_measure_widget.dart';
 import 'package:mobile/presentation/core/size_config.dart';
+import 'package:mobile/presentation/dashboard/home_dashboard.dart';
 import 'package:mobile/presentation/sensors/measures_list.dart';
 import 'package:mobile/presentation/register/configuration_form.dart';
 import 'package:mobile/presentation/settings/settings.dart';
 
-enum NavigationState { home, wifiDashboard, configurationForm }
+enum NavigationState { home, configurationForm }
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -87,45 +88,43 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch (navState) {
       case NavigationState.home:
-        changeTitle("Resumen de mediciones");
-        page = const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Center(child: Text("home")),
-        );
+        changeTitle("Mediciones");
+        page = const HomeDashBoard();
         break;
       case NavigationState.configurationForm:
         changeTitle("Configuración de alertas");
         page = Column(
-          children: [
+          children: const [
             AlertSettings(),
           ],
         );
         break;
-      case NavigationState.wifiDashboard:
-        if (route == "sensors") {
-          changeTitle("Sensores activos");
-        } else {
-          changeTitle("Mediciones del sensor");
-        }
-
-        page = route == "sensors"
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(child: WifiSensorMeasureWidget(callback: callback)),
-                ],
-              )
-            : page = Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                      child: MeasuresList(
-                    sensorMeasures: args,
-                  )),
-                ],
-              );
-        break;
     }
+    //   case NavigationState.wifiDashboard:
+    //     if (route == "sensors") {
+    //       changeTitle("Sensores activos");
+    //     } else {
+    //       changeTitle("Mediciones del sensor");
+    //     }
+
+    //     page = route == "sensors"
+    //         ? Row(
+    //             mainAxisAlignment: MainAxisAlignment.center,
+    //             children: [
+    //               Center(child: WifiSensorMeasureWidget(callback: callback)),
+    //             ],
+    //           )
+    //         : page = Row(
+    //             mainAxisAlignment: MainAxisAlignment.center,
+    //             children: [
+    //               Center(
+    //                   child: MeasuresList(
+    //                 sensorMeasures: args,
+    //               )),
+    //             ],
+    //           );
+    //     break;
+    // }
 
     return Scaffold(
       appBar: route == "measures"
@@ -145,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: navState.index,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
-          BottomNavigationBarItem(icon: Icon(Icons.sensors), label: "Sensores"),
+          // BottomNavigationBarItem(icon: Icon(Icons.sensors), label: "Sensores"),
           BottomNavigationBarItem(
               icon: Icon(Icons.notifications_active), label: "Alertas"),
         ],

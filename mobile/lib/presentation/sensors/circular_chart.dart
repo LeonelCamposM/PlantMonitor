@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/domain/measure.dart';
+import 'package:mobile/presentation/core/size_config.dart';
 import 'package:mobile/presentation/core/text.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -82,7 +83,7 @@ class PercentageWidget extends StatelessWidget {
             child: CircularPercentIndicator(
               animation: true,
               animationDuration: 1000,
-              radius: 90.0,
+              radius: SizeConfig.blockSizeVertical * 13,
               lineWidth: 25,
               percent: percentaje / 100,
               progressColor: barColor,

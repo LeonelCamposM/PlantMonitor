@@ -1,51 +1,55 @@
-// import 'dart:async';
-// import 'dart:convert';
-// import 'package:http/http.dart' as http;
-// import 'package:flutter/material.dart';
-// import 'package:mobile/domain/measure.dart';
-// import 'package:mobile/presentation/dashboard/dashboard.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:mobile/domain/measure.dart';
+import 'package:mobile/presentation/sensors/circular_chart.dart';
 
-// class APSensorMeasureWidget extends StatefulWidget {
-//   const APSensorMeasureWidget({Key? key}) : super(key: key);
+// ignore: must_be_immutable
+class APSensorMeasureWidget extends StatefulWidget {
+  APSensorMeasureWidget({Key? key, required this.meassureName})
+      : super(key: key);
+  String meassureName;
 
-//   @override
-//   State<APSensorMeasureWidget> createState() => _APSensorMeasureWidgetState();
-// }
+  @override
+  State<APSensorMeasureWidget> createState() => _APSensorMeasureWidgetState();
+}
 
-// class _APSensorMeasureWidgetState extends State<APSensorMeasureWidget> {
-//   SensorMeasure sensorMeasure = SensorMeasure(0, "", 0);
-//   Timer? timer;
+class _APSensorMeasureWidgetState extends State<APSensorMeasureWidget> {
+  Measure sensorMeasure = Measure("", 50);
+  Timer? timer;
 
-//   void getUpdatedValue() async {
-//     final response = await http.get(
-//       Uri.parse('http://192.168.1.22:80/getSensorData'),
-//     );
-//     if (response.statusCode == 200) {
-//       Map map = json.decode(response.body);
-//       setState(() {
-//         sensorMeasure = SensorMeasure.fromJson(map);
-//       });
-//     }
-//   }
+  void getUpdatedValue(String meassureName) async {
+    final response = await http.get(
+      Uri.parse('http://192.168.1.22:80/getSensorData/$meassureName'),
+    );
+    if (response.statusCode == 200) {
+      Map map = json.decode(response.body);
+      setState(() {
+        sensorMeasure = Measure.fromJson(map);
+      });
+    }
+  }
 
-//   @override
-//   void initState() {
-//     getUpdatedValue();
-//     super.initState();
-//     timer = Timer.periodic(
-//         const Duration(seconds: 5), (Timer t) => getUpdatedValue());
-//   }
+  @override
+  void initState() {
+    sensorMeasure.name = widget.meassureName;
+    getUpdatedValue(widget.meassureName);
+    super.initState();
+    timer = Timer.periodic(const Duration(seconds: 5),
+        (Timer t) => getUpdatedValue(widget.meassureName));
+  }
 
-//   @override
-//   void dispose() {
-//     timer?.cancel();
-//     super.dispose();
-//   }
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Dashboard(
-//       sensorMeasure: sensorMeasure,
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return CircularChartCard(
+      sensorMeasure: sensorMeasure,
+    );
+  }
+}

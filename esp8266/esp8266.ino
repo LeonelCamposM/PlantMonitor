@@ -20,11 +20,11 @@ int getMoisturePercentage() {
   if(percentageHumidity > 100) {
     percentageHumidity = 100;
   }
-  Serial.print("Moisture: "); 
-  Serial.print(sensorValue); 
-  Serial.print(" percentage: ");
-  Serial.print(percentageHumidity);
-  Serial.println("");
+  // Serial.print("Moisture: "); 
+  // Serial.print(sensorValue); 
+  // Serial.print(" percentage: ");
+  // Serial.print(percentageHumidity);
+  // Serial.println("");
   return percentageHumidity;
 }
 
@@ -41,12 +41,12 @@ void sendMessage(String message){
   // Send HTTP POST request
   int httpResponseCode = http.POST(url);
   if (httpResponseCode == 200){
-    Serial.print("Message sent successfully");
+    // Serial.print("Message sent successfully");
   }
   else{
-    Serial.println("Error sending the message");
-    Serial.print("HTTP response code: ");
-    Serial.println(httpResponseCode);
+    // Serial.println("Error sending the message");
+    // Serial.print("HTTP response code: ");
+    // Serial.println(httpResponseCode);
   }
 
   // Free resources
@@ -54,27 +54,27 @@ void sendMessage(String message){
 }
 
 void setup() { 
-  Serial.begin(115200);
-  while (!Serial);
+  // Serial.begin(115200);
+  // while (!Serial);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);             // Connect to the network
-  Serial.print("Connecting to ");
-  Serial.print(WIFI_SSID); Serial.println(" ...");
+  // Serial.print("Connecting to ");
+  // Serial.print(WIFI_SSID); Serial.println(" ...");
 
   int i = 0;
   while (WiFi.status() != WL_CONNECTED) { // Wait for the Wi-Fi to connect
     delay(1000);
-    Serial.print(++i); Serial.print(' ');
+    // Serial.print(++i); Serial.print(' ');
   }
 
-  Serial.println('\n');
-  Serial.println("Connection established!");  
-  Serial.print("IP address:\t");
-  Serial.println(WiFi.localIP());  
-  Serial.println("Sending message");
+  // Serial.println('\n');
+  // Serial.println("Connection established!");  
+  // Serial.print("IP address:\t");
+  // Serial.println(WiFi.localIP());  
+  // Serial.println("Sending message");
   sendMessage("Humedad:+"+String(getMoisturePercentage())); 
-  Serial.println("Modo ESP8266 deep sleep durante 10 segundos");
+  // Serial.println("Modo ESP8266 deep sleep durante 10 segundos");
   delay(20000);
-  ESP.deepSleep(20e6); 
+  ESP.deepSleep(3600e6); 
 }
 
 void loop() {
