@@ -1,4 +1,6 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/infraestructure/users_repo.dart';
 import 'package:mobile/presentation/core/size_config.dart';
 import 'package:mobile/presentation/core/text.dart';
 
@@ -11,25 +13,49 @@ class AlertSettings extends StatefulWidget {
 }
 
 class _AlertSettingsState extends State<AlertSettings> {
+  double min = 0;
+  double max = 0;
+
+  void setValues(double humidityMin, double humiditymax) {
+    setState(() {
+      min = humidityMin;
+      max = humiditymax;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          height: SizeConfig.blockSizeVertical * 3,
+        Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: TitledSlider(
+            setValues: setValues,
+            title: "Húmedad del suelo",
+            max: 100,
+          ),
         ),
-        TitledSlider(
-          title: "Húmedad minima",
-          max: 100,
-        ),
-        TitledSlider(
-          title: "Batería minima",
-          max: 100,
-        ),
-        TitledSlider(
-          title: "Frecuencia de reporte",
-          max: 24,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: SizedBox(
+                width: SizeConfig.blockSizeHorizontal * 14,
+                height: SizeConfig.blockSizeHorizontal * 14,
+                child: FloatingActionButton(
+                  onPressed: () => {updateUserLimits(min, max)},
+                  child: Icon(
+                    size: SizeConfig.blockSizeHorizontal * 6,
+                    Icons.send,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -40,29 +66,24 @@ class _AlertSettingsState extends State<AlertSettings> {
 class TitledSlider extends StatefulWidget {
   String title = "";
   double max = 0;
-  TitledSlider({super.key, required this.title, required this.max});
+  TitledSlider(
+      {super.key,
+      required this.title,
+      required this.max,
+      required this.setValues});
 
+  Function setValues;
   @override
   State<TitledSlider> createState() => _TitledSliderState();
 }
 
 class _TitledSliderState extends State<TitledSlider> {
-  double _currentValue = 0;
+  double max = 0;
+  double min = 0;
 
   String getValueTag(int value, String title) {
     String tag = "";
-    switch (title) {
-      case "Húmedad minima":
-        tag = "$value%";
-        break;
-      case "Batería minima":
-        tag = "$value%";
-        break;
-      case "Frecuencia de reporte":
-        tag = "$value horas";
-        break;
-      default:
-    }
+    tag = "$value%";
     return tag;
   }
 
@@ -84,14 +105,51 @@ class _TitledSliderState extends State<TitledSlider> {
                 SizedBox(
                   height: SizeConfig.blockSizeVertical * 3,
                 ),
+                SizedBox(
+                  height: SizeConfig.blockSizeVertical * 3,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: SizedBox(child: getBodyText("Máximo: ", false)),
+                      ),
+                    ],
+                  ),
+                ),
                 Slider(
-                  value: _currentValue,
+                  value: max,
                   max: widget.max,
                   divisions: 10,
-                  label: getValueTag(_currentValue.round(), widget.title),
+                  label: getValueTag(max.round(), widget.title),
                   onChanged: (double value) {
                     setState(() {
-                      _currentValue = value;
+                      max = value;
+                    });
+                    widget.setValues(min, max);
+                  },
+                ),
+                SizedBox(
+                  height: SizeConfig.blockSizeVertical * 3,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 10),
+                        child: SizedBox(child: getBodyText("Mínimo: ", false)),
+                      ),
+                    ],
+                  ),
+                ),
+                Slider(
+                  value: min,
+                  max: widget.max,
+                  divisions: 10,
+                  label: getValueTag(min.round(), widget.title),
+                  onChanged: (double value) {
+                    setState(() {
+                      min = value;
+                      widget.setValues(min, max);
                     });
                   },
                 ),

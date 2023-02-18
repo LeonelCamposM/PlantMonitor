@@ -14,3 +14,20 @@ class Measure {
         'battery': battery,
       };
 }
+
+class MeasureLimit {
+  int max;
+  int min;
+
+  MeasureLimit(this.max, this.min);
+
+  factory MeasureLimit.fromJson(Map<dynamic, dynamic> json) => MeasureLimit(
+        json['max'] as int,
+        json['min'] as int,
+      );
+
+  Map<dynamic, dynamic> toJson() => {
+        'max': max,
+        'min': min,
+      };
+}

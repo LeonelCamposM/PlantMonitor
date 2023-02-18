@@ -69,26 +69,14 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case NavigationState.configurationForm:
         changeTitle("Configuración de alertas");
-        page = Column(
-          children: const [
-            AlertSettings(),
-          ],
-        );
+        page = const AlertSettings();
         break;
     }
 
     return Scaffold(
-      appBar: route == "measures"
-          ? AppBar(
-              title: Text(widget.title),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () => {callback("sensors", null)},
-              ),
-            )
-          : AppBar(
-              title: Text(widget.title),
-            ),
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
       body: page,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

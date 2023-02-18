@@ -7,9 +7,9 @@ import 'package:mobile/presentation/sensors/circular_chart.dart';
 
 // ignore: must_be_immutable
 class APSensorMeasureWidget extends StatefulWidget {
-  APSensorMeasureWidget({Key? key, required this.meassureName})
+  APSensorMeasureWidget({Key? key, required this.measureLimits})
       : super(key: key);
-  String meassureName;
+  MeasureLimit measureLimits;
 
   @override
   State<APSensorMeasureWidget> createState() => _APSensorMeasureWidgetState();
@@ -19,7 +19,7 @@ class _APSensorMeasureWidgetState extends State<APSensorMeasureWidget> {
   Measure sensorMeasure = Measure(0, 0);
   Timer? timer;
 
-  void getUpdatedValue(String meassureName) async {
+  void getUpdatedValue() async {
     final response = await http.get(
       Uri.parse('http://192.168.1.22:80/getSensorData'),
     );
@@ -33,10 +33,10 @@ class _APSensorMeasureWidgetState extends State<APSensorMeasureWidget> {
 
   @override
   void initState() {
-    getUpdatedValue(widget.meassureName);
+    getUpdatedValue();
     super.initState();
-    timer = Timer.periodic(const Duration(seconds: 5),
-        (Timer t) => getUpdatedValue(widget.meassureName));
+    timer = Timer.periodic(
+        const Duration(seconds: 5), (Timer t) => getUpdatedValue());
   }
 
   @override
@@ -47,8 +47,13 @@ class _APSensorMeasureWidgetState extends State<APSensorMeasureWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return CircularChartCard(
-      sensorMeasure: sensorMeasure,
+    return Column(
+      children: [
+        Text("${widget.measureLimits.min} ${widget.measureLimits.max}"),
+        CircularChartCard(
+          sensorMeasure: sensorMeasure,
+        ),
+      ],
     );
   }
 }

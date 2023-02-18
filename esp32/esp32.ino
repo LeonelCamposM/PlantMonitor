@@ -13,6 +13,7 @@ void setup() {
     #endif
     
     setupAPMode();
+    setChargeLed(false);
     // esp_sleep_wakeup_cause_t wakeup_reason;
     // wakeup_reason = esp_sleep_get_wakeup_cause();
     // switch(wakeup_reason)
