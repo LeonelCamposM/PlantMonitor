@@ -1,11 +1,6 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/infraestructure/fcm_repo.dart';
-import 'package:mobile/infraestructure/wifi_sensor_measure_widget.dart';
 import 'package:mobile/presentation/core/size_config.dart';
 import 'package:mobile/presentation/dashboard/home_dashboard.dart';
-import 'package:mobile/presentation/sensors/measures_list.dart';
-import 'package:mobile/presentation/register/configuration_form.dart';
 import 'package:mobile/presentation/settings/settings.dart';
 
 enum NavigationState { home, configurationForm }
@@ -51,26 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    // FirebaseMessagingRepo fcm =
-    //     FirebaseMessagingRepo(showFlutterNotification: showFlutterNotification);
-    // fcm.requestPermission();
-    // fcm.startFCM();
-    // sendMessage(fcm);
     super.initState();
-  }
-
-  void showFlutterNotification(RemoteMessage message) {
-    RemoteNotification? notification = message.notification;
-    showModalBottomSheet(
-        context: context,
-        builder: ((context) {
-          return Text(notification!.title.toString());
-        }));
-  }
-
-  void sendMessage(FirebaseMessagingRepo fcm) async {
-    String? token = await fcm.getToken();
-    fcm.sendPushMessage(token!, "notificacion post", "nueva");
   }
 
   void changeTitle(String title) {

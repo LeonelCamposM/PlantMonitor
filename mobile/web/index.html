@@ -19,43 +19,7 @@
     <link rel="manifest" href="manifest.json">
   </head>
 
-  <body>
-    <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-messaging.js"></script>
-        
-    <script>
-      var firebaseConfig = {
-          apiKey: "AIzaSyCUS7BPyBvhVRGB8gUsHYMOGkxqChLQZyQ",
-          authDomain: "plantmonitor-ec8fe.firebaseapp.com",
-          databaseURL: "https://plantmonitor-ec8fe-default-rtdb.firebaseio.com",
-          projectId: "plantmonitor-ec8fe",
-          storageBucket: "plantmonitor-ec8fe.appspot.com",
-          messagingSenderId: "241290221299",
-          appId: "1:241290221299:web:b0e3a93ff7f59810ebc986"
-      };  
-      firebase.initializeApp(firebaseConfig);
-
-      const messaging = firebase.messaging();
-      messaging
-      .requestPermission()
-      .then(function () {
-          console.log('Notification permission granted.');
-          return messaging.getToken();
-      })
-      .then(function (token) {
-          console.log(token)
-      })
-      .catch(function (err) {
-        console.log(err)
-      });
-    </script>
+  <body>       
     <script src="main.dart.js" type="application/javascript"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('flutter-first-frame', function () {
-          navigator.serviceWorker.register('/firebase-messaging-sw.js');
-        });
-      }
-    </script>
   </body>
 </html>
