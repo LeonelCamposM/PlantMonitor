@@ -18,5 +18,5 @@ int getMoisturePercentage() {
   Serial.print(percentageHumidity);
   Serial.println("");
   #endif
-  return percentageHumidity;
+  return 9;
 }

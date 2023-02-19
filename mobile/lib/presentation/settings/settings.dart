@@ -1,12 +1,13 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/domain/measure.dart';
 import 'package:mobile/infraestructure/users_repo.dart';
 import 'package:mobile/presentation/core/size_config.dart';
 import 'package:mobile/presentation/core/text.dart';
 
 // ignore: must_be_immutable
 class AlertSettings extends StatefulWidget {
-  const AlertSettings({super.key});
+  AlertSettings({super.key, required this.limit});
+  MeasureLimit limit;
 
   @override
   State<AlertSettings> createState() => _AlertSettingsState();
@@ -24,6 +25,13 @@ class _AlertSettingsState extends State<AlertSettings> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    min = widget.limit.min.toDouble();
+    max = widget.limit.max.toDouble();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -35,6 +43,7 @@ class _AlertSettingsState extends State<AlertSettings> {
             setValues: setValues,
             title: "Húmedad del suelo",
             max: 100,
+            limit: widget.limit,
           ),
         ),
         Row(
@@ -70,9 +79,12 @@ class TitledSlider extends StatefulWidget {
       {super.key,
       required this.title,
       required this.max,
-      required this.setValues});
+      required this.setValues,
+      required this.limit});
 
   Function setValues;
+  MeasureLimit limit;
+
   @override
   State<TitledSlider> createState() => _TitledSliderState();
 }
@@ -85,6 +97,13 @@ class _TitledSliderState extends State<TitledSlider> {
     String tag = "";
     tag = "$value%";
     return tag;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    max = widget.limit.max.toDouble();
+    min = widget.limit.min.toDouble();
   }
 
   @override

@@ -49,9 +49,9 @@ class _APSensorMeasureWidgetState extends State<APSensorMeasureWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text("${widget.measureLimits.min} ${widget.measureLimits.max}"),
         CircularChartCard(
           sensorMeasure: sensorMeasure,
+          limit: widget.measureLimits,
         ),
       ],
     );

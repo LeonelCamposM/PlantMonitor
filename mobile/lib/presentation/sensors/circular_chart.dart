@@ -5,8 +5,10 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 
 // ignore: must_be_immutable
 class CircularChartCard extends StatelessWidget {
-  CircularChartCard({super.key, required this.sensorMeasure});
+  CircularChartCard(
+      {super.key, required this.sensorMeasure, required this.limit});
   Measure sensorMeasure;
+  MeasureLimit limit;
 
   @override
   Widget build(BuildContext context) {
@@ -15,16 +17,29 @@ class CircularChartCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          PercentageWidget(
-            percentaje: sensorMeasure.battery.toDouble(),
-            title: "Batería",
-            barColor: Colors.yellow,
-          ),
-          PercentageWidget(
-            percentaje: sensorMeasure.humidity.toDouble(),
-            title: "Humedad",
-            barColor: Colors.lightBlue,
-          )
+          limit.max > sensorMeasure.humidity &&
+                  limit.min < sensorMeasure.humidity
+              ? PercentageWidget(
+                  percentaje: sensorMeasure.humidity.toDouble(),
+                  title: "Humedad",
+                  barColor: Colors.lightBlue,
+                )
+              : PercentageWidget(
+                  percentaje: sensorMeasure.humidity.toDouble(),
+                  title: "Humedad",
+                  barColor: Colors.red,
+                ),
+          10 < sensorMeasure.battery
+              ? PercentageWidget(
+                  percentaje: sensorMeasure.battery.toDouble(),
+                  title: "Batería",
+                  barColor: Colors.yellow,
+                )
+              : PercentageWidget(
+                  percentaje: sensorMeasure.battery.toDouble(),
+                  title: "Batería",
+                  barColor: Colors.red,
+                ),
         ],
       ),
     );

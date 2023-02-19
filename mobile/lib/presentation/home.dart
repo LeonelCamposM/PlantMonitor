@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/infraestructure/users_repo.dart';
 import 'package:mobile/presentation/core/size_config.dart';
 import 'package:mobile/presentation/dashboard/home_dashboard.dart';
 import 'package:mobile/presentation/settings/settings.dart';
@@ -69,7 +70,7 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case NavigationState.configurationForm:
         changeTitle("Configuración de alertas");
-        page = const AlertSettings();
+        page = FirebaseAlertsWidget();
         break;
     }
 
