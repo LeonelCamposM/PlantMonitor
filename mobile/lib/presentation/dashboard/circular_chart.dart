@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/domain/measure.dart';
-import 'package:mobile/presentation/core/text.dart';
+import 'package:plant_monitor/domain/measure.dart';
+import 'package:plant_monitor/presentation/core/text.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 // ignore: must_be_immutable

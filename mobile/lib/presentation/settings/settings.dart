@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/domain/measure.dart';
-import 'package:mobile/infraestructure/users_repo.dart';
-import 'package:mobile/presentation/core/size_config.dart';
-import 'package:mobile/presentation/core/text.dart';
+import 'package:plant_monitor/domain/measure.dart';
+import 'package:plant_monitor/infraestructure/users_limit_repo.dart';
+import 'package:plant_monitor/presentation/core/size_config.dart';
+import 'package:plant_monitor/presentation/core/text.dart';
 
 // ignore: must_be_immutable
 class AlertSettings extends StatefulWidget {

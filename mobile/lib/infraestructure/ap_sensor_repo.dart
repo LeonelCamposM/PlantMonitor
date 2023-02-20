@@ -2,20 +2,19 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:mobile/domain/measure.dart';
-import 'package:mobile/presentation/sensors/circular_chart.dart';
+import 'package:plant_monitor/domain/measure.dart';
+import 'package:plant_monitor/presentation/dashboard/circular_chart.dart';
 
 // ignore: must_be_immutable
-class APSensorMeasureWidget extends StatefulWidget {
-  APSensorMeasureWidget({Key? key, required this.measureLimits})
-      : super(key: key);
+class APSensorRepo extends StatefulWidget {
+  APSensorRepo({Key? key, required this.measureLimits}) : super(key: key);
   MeasureLimit measureLimits;
 
   @override
-  State<APSensorMeasureWidget> createState() => _APSensorMeasureWidgetState();
+  State<APSensorRepo> createState() => _APSensorMeasureRepoState();
 }
 
-class _APSensorMeasureWidgetState extends State<APSensorMeasureWidget> {
+class _APSensorMeasureRepoState extends State<APSensorRepo> {
   Measure sensorMeasure = Measure(0, 0);
   Timer? timer;
 

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/infraestructure/users_repo.dart';
-import 'package:mobile/presentation/core/size_config.dart';
+import 'package:plant_monitor/domain/measure.dart';
+import 'package:plant_monitor/infraestructure/users_limit_repo.dart';
+import 'package:plant_monitor/infraestructure/users_measures_repo.dart';
+import 'package:plant_monitor/presentation/core/size_config.dart';
 
 class HomeDashBoard extends StatelessWidget {
   const HomeDashBoard({super.key});
@@ -18,7 +20,7 @@ class HomeDashBoard extends StatelessWidget {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [WifiSensorMeasureWidget()],
+              children: [SensorMeasureWidget()],
             ),
             SizedBox(
               height: SizeConfig.blockSizeVertical * 10,
@@ -37,7 +39,7 @@ class HomeDashBoard extends StatelessWidget {
                     width: SizeConfig.blockSizeHorizontal * 14,
                     height: SizeConfig.blockSizeHorizontal * 14,
                     child: FloatingActionButton(
-                      onPressed: (() => {print("updloaded")}),
+                      onPressed: (() => {addMeasure(Measure(23, 67))}),
                       child: Icon(
                         size: SizeConfig.blockSizeHorizontal * 6,
                         Icons.save,

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/infraestructure/users_repo.dart';
-import 'package:mobile/presentation/core/size_config.dart';
-import 'package:mobile/presentation/dashboard/home_dashboard.dart';
-import 'package:mobile/presentation/settings/settings.dart';
+import 'package:plant_monitor/infraestructure/users_limit_repo.dart';
+import 'package:plant_monitor/presentation/core/size_config.dart';
+import 'package:plant_monitor/presentation/dashboard/home_dashboard.dart';
 
-enum NavigationState { home, configurationForm }
+enum NavigationState { home, settings }
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -35,15 +34,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   NavigationState navState = NavigationState.home;
-  String route = "sensors";
-  dynamic args;
-
-  callback(String route, dynamic args) {
-    setState(() {
-      this.route = route;
-      this.args = args;
-    });
-  }
 
   @override
   void initState() {
@@ -56,8 +46,6 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void enableBack() {}
-
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -68,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
         changeTitle("Mediciones");
         page = const HomeDashBoard();
         break;
-      case NavigationState.configurationForm:
+      case NavigationState.settings:
         changeTitle("Configuración de alertas");
         page = FirebaseAlertsWidget();
         break;

@@ -1,24 +1,33 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/domain/measure.dart';
-import 'package:mobile/infraestructure/ap_sensor_measure_widget.dart';
-import 'package:mobile/presentation/settings/settings.dart';
+import 'package:plant_monitor/domain/measure.dart';
+import 'package:plant_monitor/infraestructure/ap_sensor_repo.dart';
+import 'package:plant_monitor/presentation/settings/settings.dart';
+
+MeasureLimit getUpdatedLimit(AsyncSnapshot<DatabaseEvent> snapshot) {
+  MeasureLimit limit = MeasureLimit(0, 0);
+  if (snapshot.hasData) {
+    Map<dynamic, dynamic> map =
+        snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+    limit = MeasureLimit.fromJson(map);
+  }
+  return limit;
+}
+
+void updateUserLimits(double min, double max) async {
+  DatabaseReference minRef =
+      FirebaseDatabase.instance.ref("users/leonel/humidityLimit/min");
+  DatabaseReference maxRef =
+      FirebaseDatabase.instance.ref("users/leonel/humidityLimit/max");
+  minRef.set(min);
+  maxRef.set(max);
+}
 
 // ignore: must_be_immutable
-class WifiSensorMeasureWidget extends StatelessWidget {
-  WifiSensorMeasureWidget({Key? key}) : super(key: key);
+class SensorMeasureWidget extends StatelessWidget {
+  SensorMeasureWidget({Key? key}) : super(key: key);
   DatabaseReference starCountRef =
       FirebaseDatabase.instance.ref("users/leonel/humidityLimit");
-
-  MeasureLimit getUpdatedValue(AsyncSnapshot<DatabaseEvent> snapshot) {
-    MeasureLimit limit = MeasureLimit(0, 0);
-    if (snapshot.hasData) {
-      Map<dynamic, dynamic> map =
-          snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
-      limit = MeasureLimit.fromJson(map);
-    }
-    return limit;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +43,8 @@ class WifiSensorMeasureWidget extends StatelessWidget {
           return const Text('');
         }
 
-        MeasureLimit limit = getUpdatedValue(snapshot);
-        return APSensorMeasureWidget(
+        MeasureLimit limit = getUpdatedLimit(snapshot);
+        return APSensorRepo(
           measureLimits: limit,
         );
       },
@@ -49,16 +58,6 @@ class FirebaseAlertsWidget extends StatelessWidget {
   DatabaseReference starCountRef =
       FirebaseDatabase.instance.ref("users/leonel/humidityLimit");
 
-  MeasureLimit getUpdatedValue(AsyncSnapshot<DatabaseEvent> snapshot) {
-    MeasureLimit limit = MeasureLimit(0, 0);
-    if (snapshot.hasData) {
-      Map<dynamic, dynamic> map =
-          snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
-      limit = MeasureLimit.fromJson(map);
-    }
-    return limit;
-  }
-
   @override
   Widget build(BuildContext context) {
     starCountRef.keepSynced(true);
@@ -73,20 +72,11 @@ class FirebaseAlertsWidget extends StatelessWidget {
           return const Text('');
         }
 
-        MeasureLimit limit = getUpdatedValue(snapshot);
+        MeasureLimit limit = getUpdatedLimit(snapshot);
         return AlertSettings(
           limit: limit,
         );
       },
     );
   }
-}
-
-void updateUserLimits(double min, double max) async {
-  DatabaseReference minRef =
-      FirebaseDatabase.instance.ref("users/leonel/humidityLimit/min");
-  DatabaseReference maxRef =
-      FirebaseDatabase.instance.ref("users/leonel/humidityLimit/max");
-  minRef.set(min);
-  maxRef.set(max);
 }
