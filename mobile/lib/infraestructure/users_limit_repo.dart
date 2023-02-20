@@ -27,15 +27,15 @@ void updateUserLimits(double min, double max) async {
 class SensorMeasureWidget extends StatelessWidget {
   SensorMeasureWidget({Key? key, required this.updateMeassure})
       : super(key: key);
-  DatabaseReference starCountRef =
+  DatabaseReference humididtyLimitRef =
       FirebaseDatabase.instance.ref("users/leonel/humidityLimit");
   Function updateMeassure;
 
   @override
   Widget build(BuildContext context) {
-    starCountRef.keepSynced(true);
+    humididtyLimitRef.keepSynced(true);
     return StreamBuilder(
-      stream: starCountRef.onValue,
+      stream: humididtyLimitRef.onValue,
       builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
         if (snapshot.hasError) {
           return const Text('');
@@ -58,14 +58,14 @@ class SensorMeasureWidget extends StatelessWidget {
 // ignore: must_be_immutable
 class FirebaseAlertsWidget extends StatelessWidget {
   FirebaseAlertsWidget({Key? key}) : super(key: key);
-  DatabaseReference starCountRef =
+  DatabaseReference humididtyLimitRef =
       FirebaseDatabase.instance.ref("users/leonel/humidityLimit");
 
   @override
   Widget build(BuildContext context) {
-    starCountRef.keepSynced(true);
+    humididtyLimitRef.keepSynced(true);
     return StreamBuilder(
-      stream: starCountRef.onValue,
+      stream: humididtyLimitRef.onValue,
       builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
         if (snapshot.hasError) {
           return const Text('');

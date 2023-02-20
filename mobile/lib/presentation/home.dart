@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:plant_monitor/infraestructure/users_limit_repo.dart';
 import 'package:plant_monitor/presentation/core/size_config.dart';
 import 'package:plant_monitor/presentation/dashboard/home_dashboard.dart';
+import 'package:plant_monitor/presentation/measures/measuresChart.dart';
 
-enum NavigationState { home, settings }
+enum NavigationState { home, measures, settings }
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -53,12 +54,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
     switch (navState) {
       case NavigationState.home:
-        changeTitle("Mediciones");
+        changeTitle("Medir");
         page = const HomeDashBoard();
         break;
       case NavigationState.settings:
         changeTitle("Configuración de alertas");
         page = FirebaseAlertsWidget();
+        break;
+      case NavigationState.measures:
+        changeTitle("Mediciones");
+        page = measuresChart();
         break;
     }
 
@@ -72,6 +77,8 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: navState.index,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.analytics), label: "Mediciones"),
           BottomNavigationBarItem(
               icon: Icon(Icons.notifications_active), label: "Alertas"),
         ],
