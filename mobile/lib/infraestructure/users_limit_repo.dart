@@ -25,9 +25,11 @@ void updateUserLimits(double min, double max) async {
 
 // ignore: must_be_immutable
 class SensorMeasureWidget extends StatelessWidget {
-  SensorMeasureWidget({Key? key}) : super(key: key);
+  SensorMeasureWidget({Key? key, required this.updateMeassure})
+      : super(key: key);
   DatabaseReference starCountRef =
       FirebaseDatabase.instance.ref("users/leonel/humidityLimit");
+  Function updateMeassure;
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +48,7 @@ class SensorMeasureWidget extends StatelessWidget {
         MeasureLimit limit = getUpdatedLimit(snapshot);
         return APSensorRepo(
           measureLimits: limit,
+          updateMeassure: updateMeassure,
         );
       },
     );

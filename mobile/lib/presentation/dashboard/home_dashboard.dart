@@ -4,8 +4,19 @@ import 'package:plant_monitor/infraestructure/users_limit_repo.dart';
 import 'package:plant_monitor/infraestructure/users_measures_repo.dart';
 import 'package:plant_monitor/presentation/core/size_config.dart';
 
-class HomeDashBoard extends StatelessWidget {
+class HomeDashBoard extends StatefulWidget {
   const HomeDashBoard({super.key});
+
+  @override
+  State<HomeDashBoard> createState() => _HomeDashBoardState();
+}
+
+class _HomeDashBoardState extends State<HomeDashBoard> {
+  Measure currentMeassure = Measure(0, 0);
+
+  void updateMeassure(Measure newMeassure) {
+    currentMeassure = newMeassure;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +31,11 @@ class HomeDashBoard extends StatelessWidget {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [SensorMeasureWidget()],
+              children: [
+                SensorMeasureWidget(
+                  updateMeassure: updateMeassure,
+                )
+              ],
             ),
             SizedBox(
               height: SizeConfig.blockSizeVertical * 10,
@@ -39,7 +54,7 @@ class HomeDashBoard extends StatelessWidget {
                     width: SizeConfig.blockSizeHorizontal * 14,
                     height: SizeConfig.blockSizeHorizontal * 14,
                     child: FloatingActionButton(
-                      onPressed: (() => {addMeasure(Measure(23, 67))}),
+                      onPressed: (() => {addMeasure(currentMeassure)}),
                       child: Icon(
                         size: SizeConfig.blockSizeHorizontal * 6,
                         Icons.save,

@@ -7,8 +7,11 @@ import 'package:plant_monitor/presentation/dashboard/circular_chart.dart';
 
 // ignore: must_be_immutable
 class APSensorRepo extends StatefulWidget {
-  APSensorRepo({Key? key, required this.measureLimits}) : super(key: key);
+  APSensorRepo(
+      {Key? key, required this.measureLimits, required this.updateMeassure})
+      : super(key: key);
   MeasureLimit measureLimits;
+  Function updateMeassure;
 
   @override
   State<APSensorRepo> createState() => _APSensorMeasureRepoState();
@@ -24,6 +27,7 @@ class _APSensorMeasureRepoState extends State<APSensorRepo> {
     );
     if (response.statusCode == 200) {
       Map map = json.decode(response.body);
+      widget.updateMeassure(Measure.fromJson(map));
       setState(() {
         sensorMeasure = Measure.fromJson(map);
       });
