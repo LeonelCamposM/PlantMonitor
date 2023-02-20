@@ -15,10 +15,10 @@ void onGetSensorData() {
 
 void startHttpServer(){
   server.on("/getSensorData", HTTP_GET, onGetSensorData);
+  server.begin();
   #ifdef DEBUG
   Serial.println("Listening on 192.168.1.22:80");
   #endif
-  server.begin();
 }
 
 void serverHandleClient(){

@@ -26,9 +26,6 @@ void stopAccesPoint(){
 
 void setupAPMode(){
   setChargeLed(true);
-  #ifdef DEBUG
-  Serial.println("AP MODE");
-  #endif
   startAccesPoint();
   startHttpServer();
 }

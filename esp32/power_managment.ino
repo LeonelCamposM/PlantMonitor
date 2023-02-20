@@ -5,21 +5,7 @@ AXP20X_Class axp;
 bool startAxp192() {
   bool error = false;
   Wire.begin(21, 22);
-  if(axp.begin(Wire, AXP192_SLAVE_ADDRESS) == AXP_FAIL) {
-    #ifdef DEBUG
-    Serial.println(F("failed to initialize communication with AXP192"));
-    error = true;
-    #endif
-  }else{
-    if(axp.setPowerOutPut(AXP192_LDO3, AXP202_OFF) == AXP_PASS) {
-      #ifdef DEBUG
-      Serial.println(F("turned off GPS module"));
-      #endif
-    } else {
-      #ifdef DEBUG
-      Serial.println(F("failed to turn off GPS module"));
-      #endif
-    }
+  if(axp.begin(Wire, AXP192_SLAVE_ADDRESS) != AXP_FAIL) {
     setChargeValues();
     setChargeLed(false);
   }
