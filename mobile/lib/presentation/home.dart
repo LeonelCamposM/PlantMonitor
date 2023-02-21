@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:plant_monitor/infraestructure/users_limit_repo.dart';
 import 'package:plant_monitor/presentation/core/size_config.dart';
 import 'package:plant_monitor/presentation/dashboard/home_dashboard.dart';
-import 'package:plant_monitor/presentation/measures/measuresChart.dart';
+import 'package:plant_monitor/presentation/measures/measures_chart.dart';
 
 enum NavigationState { home, measures, settings }
 
@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case NavigationState.measures:
         changeTitle("Mediciones");
-        page = measuresChart();
+        page = MeasuresChart();
         break;
     }
 
