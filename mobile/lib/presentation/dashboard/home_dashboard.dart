@@ -56,7 +56,7 @@ class _HomeDashBoardState extends State<HomeDashBoard> {
                     child: FloatingActionButton(
                       onPressed: (() => {addMeasure(currentMeassure)}),
                       child: Icon(
-                        size: SizeConfig.blockSizeHorizontal * 6,
+                        size: SizeConfig.blockSizeHorizontal * 8,
                         Icons.save,
                         color: Colors.white,
                       ),
