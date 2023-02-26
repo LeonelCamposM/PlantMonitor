@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:plant_monitor/domain/measure.dart';
+import 'package:plant_monitor/infraestructure/ap_sensor_repo.dart';
 import 'package:plant_monitor/infraestructure/users_limit_repo.dart';
-import 'package:plant_monitor/infraestructure/users_measures_repo.dart';
 import 'package:plant_monitor/presentation/core/size_config.dart';
+import 'package:app_settings/app_settings.dart';
 
 class HomeDashBoard extends StatefulWidget {
   const HomeDashBoard({super.key});
@@ -12,7 +13,24 @@ class HomeDashBoard extends StatefulWidget {
 }
 
 class _HomeDashBoardState extends State<HomeDashBoard> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return APSensorRepo(
+      measureLimits: MeasureLimit(99, 10),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class ConectedDashboard extends StatelessWidget {
   Measure currentMeassure = Measure(0, 0);
+
+  ConectedDashboard({super.key});
 
   void updateMeassure(Measure newMeassure) {
     currentMeassure = newMeassure;
@@ -23,38 +41,19 @@ class _HomeDashBoardState extends State<HomeDashBoard> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        SensorMeasureWidget(),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              height: SizeConfig.blockSizeVertical * 10,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SensorMeasureWidget(
-                  updateMeassure: updateMeassure,
-                )
-              ],
-            ),
-            SizedBox(
-              height: SizeConfig.blockSizeVertical * 10,
-            ),
-          ],
-        ),
-        Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: SizedBox(
+            Padding(
+              padding: const EdgeInsets.only(right: 20, bottom: 20),
+              child: Column(
+                children: [
+                  SizedBox(
                     width: SizeConfig.blockSizeHorizontal * 14,
                     height: SizeConfig.blockSizeHorizontal * 14,
                     child: FloatingActionButton(
-                      onPressed: (() => {addMeasure(currentMeassure)}),
+                      onPressed: (() => {}),
                       child: Icon(
                         size: SizeConfig.blockSizeHorizontal * 8,
                         Icons.save,
@@ -62,8 +61,27 @@ class _HomeDashBoardState extends State<HomeDashBoard> {
                       ),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: SizeConfig.blockSizeHorizontal * 3,
+                  ),
+                  SizedBox(
+                    width: SizeConfig.blockSizeHorizontal * 14,
+                    height: SizeConfig.blockSizeHorizontal * 14,
+                    child: FloatingActionButton(
+                      onPressed: (() => {
+                            AppSettings.openWIFISettings(callback: () {
+                              print("sample callback function called");
+                            }),
+                          }),
+                      child: Icon(
+                        size: SizeConfig.blockSizeHorizontal * 8,
+                        Icons.power_off,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

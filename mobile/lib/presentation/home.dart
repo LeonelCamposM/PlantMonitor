@@ -1,10 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:plant_monitor/infraestructure/users_limit_repo.dart';
 import 'package:plant_monitor/presentation/core/size_config.dart';
 import 'package:plant_monitor/presentation/dashboard/home_dashboard.dart';
 import 'package:plant_monitor/presentation/measures/measures_chart.dart';
+import 'package:flutter/services.dart';
 
-enum NavigationState { home, measures, settings }
+enum NavigationState {
+  home,
+  measures,
+  settings,
+}
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -59,7 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case NavigationState.settings:
         changeTitle("Configuración de alertas");
-        page = FirebaseAlertsWidget();
+        page = FirebaseAlertsWidget(
+          reloader: false,
+        );
         break;
       case NavigationState.measures:
         changeTitle("Mediciones");
@@ -88,6 +97,29 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         },
       ),
+    );
+  }
+}
+
+class Reloader extends StatefulWidget {
+  Function update;
+  Reloader({super.key, required this.update});
+
+  @override
+  State<Reloader> createState() => _ReloaderState();
+}
+
+class _ReloaderState extends State<Reloader> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: (() => {widget.update()}),
+      child: const Text("update"),
     );
   }
 }

@@ -82,7 +82,7 @@ class PercentageWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: CircularPercentIndicator(
-              animation: true,
+              animation: false,
               animationDuration: 1000,
               radius: 85,
               lineWidth: 25,
