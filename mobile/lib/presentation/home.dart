@@ -1,11 +1,7 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:plant_monitor/infraestructure/users_limit_repo.dart';
 import 'package:plant_monitor/presentation/core/size_config.dart';
-import 'package:plant_monitor/presentation/dashboard/home_dashboard.dart';
 import 'package:plant_monitor/presentation/measures/measures_chart.dart';
-import 'package:flutter/services.dart';
 
 enum NavigationState {
   home,
@@ -62,7 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
     switch (navState) {
       case NavigationState.home:
         changeTitle("Medir");
-        page = const HomeDashBoard();
+        page = SensorMeasureWidget();
         break;
       case NavigationState.settings:
         changeTitle("Configuración de alertas");
