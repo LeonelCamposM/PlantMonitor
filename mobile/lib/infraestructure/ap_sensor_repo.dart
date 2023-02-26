@@ -198,11 +198,7 @@ class ConectedDashboard extends StatelessWidget {
                     width: SizeConfig.blockSizeHorizontal * 14,
                     height: SizeConfig.blockSizeHorizontal * 14,
                     child: FloatingActionButton(
-                      onPressed: (() => {
-                            print("aded"),
-                            print(currentMeassure.humidity),
-                            addMeasure(currentMeassure)
-                          }),
+                      onPressed: (() => {addMeasure(currentMeassure)}),
                       child: Icon(
                         size: SizeConfig.blockSizeHorizontal * 8,
                         Icons.save,
