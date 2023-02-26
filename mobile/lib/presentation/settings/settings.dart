@@ -55,7 +55,12 @@ class _AlertSettingsState extends State<AlertSettings> {
                 width: SizeConfig.blockSizeHorizontal * 14,
                 height: SizeConfig.blockSizeHorizontal * 14,
                 child: FloatingActionButton(
-                  onPressed: () => {updateUserLimits(min, max)},
+                  onPressed: () => {
+                    updateUserLimits(min, max),
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text('Límite de humedad actualizado '),
+                    ))
+                  },
                   child: Icon(
                     size: SizeConfig.blockSizeHorizontal * 6,
                     Icons.send,

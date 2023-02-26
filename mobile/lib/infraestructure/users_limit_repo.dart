@@ -56,10 +56,12 @@ class SensorMeasureWidget extends StatelessWidget {
 
 // ignore: must_be_immutable
 class FirebaseAlertsWidget extends StatelessWidget {
-  FirebaseAlertsWidget({Key? key, required this.reloader}) : super(key: key);
+  FirebaseAlertsWidget({
+    Key? key,
+  }) : super(key: key);
   DatabaseReference humididtyLimitRef =
       FirebaseDatabase.instance.ref("users/leonel/humidityLimit");
-  bool reloader;
+
   @override
   Widget build(BuildContext context) {
     humididtyLimitRef.keepSynced(true);

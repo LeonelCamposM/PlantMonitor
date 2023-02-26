@@ -62,9 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case NavigationState.settings:
         changeTitle("Configuración de alertas");
-        page = FirebaseAlertsWidget(
-          reloader: false,
-        );
+        page = FirebaseAlertsWidget();
         break;
       case NavigationState.measures:
         changeTitle("Mediciones");
@@ -93,29 +91,6 @@ class _MyHomePageState extends State<MyHomePage> {
           });
         },
       ),
-    );
-  }
-}
-
-class Reloader extends StatefulWidget {
-  Function update;
-  Reloader({super.key, required this.update});
-
-  @override
-  State<Reloader> createState() => _ReloaderState();
-}
-
-class _ReloaderState extends State<Reloader> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: (() => {widget.update()}),
-      child: const Text("update"),
     );
   }
 }

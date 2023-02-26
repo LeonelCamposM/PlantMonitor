@@ -100,7 +100,13 @@ class ConectedDashboard extends StatelessWidget {
                     width: SizeConfig.blockSizeHorizontal * 14,
                     height: SizeConfig.blockSizeHorizontal * 14,
                     child: FloatingActionButton(
-                      onPressed: (() => {addMeasure(currentMeassure)}),
+                      onPressed: (() => {
+                            addMeasure(currentMeassure),
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                              content: Text('Medición guardada'),
+                            ))
+                          }),
                       child: Icon(
                         size: SizeConfig.blockSizeHorizontal * 8,
                         Icons.save,
