@@ -31,3 +31,23 @@ class MeasureLimit {
         'min': min,
       };
 }
+
+class UserMeasure {
+  int battery;
+  String date;
+  int humidity;
+
+  UserMeasure(this.battery, this.date, this.humidity);
+
+  factory UserMeasure.fromJson(Map<dynamic, dynamic> json) => UserMeasure(
+        json['battery'] as int,
+        json['date'] as String,
+        json['humidity'] as int,
+      );
+
+  Map<dynamic, dynamic> toJson() => {
+        'battery': battery,
+        'date': date,
+        'humidity': humidity,
+      };
+}

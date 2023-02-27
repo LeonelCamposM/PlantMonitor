@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:plant_monitor/domain/measure.dart';
+import 'package:plant_monitor/domain/sensor_measure.dart';
 import 'package:plant_monitor/presentation/core/text.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 

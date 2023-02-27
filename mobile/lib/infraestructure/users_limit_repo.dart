@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:plant_monitor/domain/measure.dart';
+import 'package:plant_monitor/domain/sensor_measure.dart';
 import 'package:plant_monitor/infraestructure/ap_sensor_repo.dart';
 import 'package:plant_monitor/presentation/settings/settings.dart';
 

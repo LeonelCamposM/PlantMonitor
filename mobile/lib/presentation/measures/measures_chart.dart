@@ -1,27 +1,27 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:plant_monitor/domain/sensor_measure.dart';
 import 'package:plant_monitor/presentation/core/size_config.dart';
 import 'package:plant_monitor/presentation/core/text.dart';
 import 'package:plant_monitor/presentation/measures/date_picker.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+// ignore: must_be_immutable
 class MeasuresChart extends StatelessWidget {
-  MeasuresChart({super.key});
-  final TooltipBehavior tooltipBehavior = TooltipBehavior(enable: true);
+  final List<ChartData> chartData = [];
 
-  final List<ChartData> chartData = <ChartData>[
-    ChartData(1, 24),
-    ChartData(2, 23),
-    ChartData(3, 22),
-    ChartData(4, 21),
-    ChartData(5, 80),
-    ChartData(6, 79),
-    ChartData(7, 77),
-    ChartData(8, 75),
-    ChartData(9, 73),
-    ChartData(10, 68),
-    ChartData(11, 65),
-    ChartData(12, 63),
-  ];
+  MeasuresChart({super.key, required this.measures}) {
+    for (var element in measures) {
+      DateTime date = DateTime.parse(element.date);
+      chartData.add(ChartData(date, element.humidity.toDouble()));
+    }
+    chartData.sort((a, b) {
+      return a.x.compareTo(b.x);
+    });
+  }
+
+  final TooltipBehavior tooltipBehavior = TooltipBehavior(enable: true);
+  List<UserMeasure> measures;
 
   @override
   Widget build(BuildContext context) {
@@ -33,26 +33,18 @@ class MeasuresChart extends StatelessWidget {
             width: SizeConfig.blockSizeHorizontal * 90,
             height: SizeConfig.blockSizeVertical * 50,
             child: SfCartesianChart(
-                tooltipBehavior: tooltipBehavior,
-                legend: Legend(isVisible: true),
-                title: ChartTitle(text: "Humedad de suelo el Lunes"),
-                primaryXAxis: NumericAxis(
-                    labelFormat: '{value} a.m',
-                    edgeLabelPlacement: EdgeLabelPlacement.shift,
-                    borderColor: Colors.blue),
-                primaryYAxis: NumericAxis(
-                    labelFormat: '{value}%',
-                    edgeLabelPlacement: EdgeLabelPlacement.shift,
-                    borderColor: Colors.blue),
-                series: <ChartSeries<ChartData, int>>[
-                  LineSeries<ChartData, int>(
-                    name: "Humedad del suelo",
+              primaryXAxis: DateTimeAxis(
+                  rangePadding: ChartRangePadding.additional,
+                  dateFormat: DateFormat.jm()),
+              primaryYAxis: NumericAxis(
+                  labelFormat: '{value}%', borderColor: Colors.blue),
+              series: <ChartSeries<ChartData, DateTime>>[
+                LineSeries<ChartData, DateTime>(
                     dataSource: chartData,
-                    enableTooltip: true,
                     xValueMapper: (ChartData data, _) => data.x,
-                    yValueMapper: (ChartData data, _) => data.y,
-                  )
-                ])),
+                    yValueMapper: (ChartData data, _) => data.y),
+              ],
+            )),
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: Row(
@@ -123,6 +115,6 @@ class MeasuresChart extends StatelessWidget {
 
 class ChartData {
   ChartData(this.x, this.y);
-  final int x;
-  final int y;
+  final DateTime x;
+  final double y;
 }

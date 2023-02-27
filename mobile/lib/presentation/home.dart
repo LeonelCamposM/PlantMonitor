@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_monitor/infraestructure/users_limit_repo.dart';
+import 'package:plant_monitor/infraestructure/users_measures_repo.dart';
 import 'package:plant_monitor/presentation/core/size_config.dart';
 import 'package:plant_monitor/presentation/measures/measures_chart.dart';
 
@@ -66,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
       case NavigationState.measures:
         changeTitle("Mediciones");
-        page = MeasuresChart();
+        page = UserMeasuresChart();
         break;
     }
 
