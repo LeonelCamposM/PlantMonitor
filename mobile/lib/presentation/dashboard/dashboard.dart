@@ -5,6 +5,7 @@ import 'package:plant_monitor/infraestructure/users_measures_repo.dart';
 import 'package:plant_monitor/presentation/core/size_config.dart';
 import 'package:plant_monitor/presentation/core/text.dart';
 import 'package:plant_monitor/presentation/dashboard/circular_chart.dart';
+import 'package:environment_sensors/environment_sensors.dart';
 
 class DisconectedDashboard extends StatelessWidget {
   const DisconectedDashboard({super.key});
@@ -71,7 +72,7 @@ class DisconectedDashboard extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class ConectedDashboard extends StatelessWidget {
+class ConectedDashboard extends StatefulWidget {
   Measure currentMeassure;
   MeasureLimit measureLimits;
 
@@ -79,13 +80,51 @@ class ConectedDashboard extends StatelessWidget {
       {super.key, required this.currentMeassure, required this.measureLimits});
 
   @override
+  State<ConectedDashboard> createState() => _ConectedDashboardState();
+}
+
+class _ConectedDashboardState extends State<ConectedDashboard> {
+  bool lightAvailable = true;
+
+  final environmentSensors = EnvironmentSensors();
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    bool lightAvailable;
+
+    lightAvailable =
+        await environmentSensors.getSensorAvailable(SensorType.Light);
+
+    setState(() {
+      lightAvailable = lightAvailable;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        // (lightAvailable)
+        //     ? StreamBuilder<double>(
+        //         stream: environmentSensors.light,
+        //         builder: (context, snapshot) {
+        //           if (!snapshot.hasData) {
+        //             return const CircularProgressIndicator();
+        //           }
+        //           return Text(
+        //               'Luz detectada: ${snapshot.data?.toStringAsFixed(2)} lx');
+        //         })
+        //     : const Text('No light sensor found'),
         CircularChartCard(
-          sensorMeasure: currentMeassure,
-          limit: measureLimits,
+          sensorMeasure: widget.currentMeassure,
+          limit: widget.measureLimits,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -101,7 +140,7 @@ class ConectedDashboard extends StatelessWidget {
                     height: SizeConfig.blockSizeHorizontal * 14,
                     child: FloatingActionButton(
                       onPressed: (() => {
-                            addMeasure(currentMeassure),
+                            addMeasure(widget.currentMeassure),
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               content: Text('Medición guardada'),
