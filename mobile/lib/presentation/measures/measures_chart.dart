@@ -9,15 +9,33 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 // ignore: must_be_immutable
 class MeasuresChart extends StatelessWidget {
   final List<ChartData> chartData = [];
+  bool oneDay = true;
 
   MeasuresChart({super.key, required this.measures}) {
+    List<DateTime> days = [];
     for (var element in measures) {
       DateTime date = DateTime.parse(element.date);
       chartData.add(ChartData(date, element.humidity.toDouble()));
+      days.add(date);
     }
     chartData.sort((a, b) {
       return a.x.compareTo(b.x);
     });
+    oneDay = sameDay(days);
+  }
+
+  bool sameDay(List<DateTime> fechas) {
+    DateTime primerDia = fechas[0].toLocal();
+    int dia = primerDia.day;
+
+    for (int i = 1; i < fechas.length; i++) {
+      DateTime fecha = fechas[i].toLocal();
+      if (fecha.day != dia) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   final TooltipBehavior tooltipBehavior = TooltipBehavior(enable: true);
@@ -32,19 +50,33 @@ class MeasuresChart extends StatelessWidget {
         SizedBox(
             width: SizeConfig.blockSizeHorizontal * 90,
             height: SizeConfig.blockSizeVertical * 50,
-            child: SfCartesianChart(
-              primaryXAxis: DateTimeAxis(
-                  rangePadding: ChartRangePadding.additional,
-                  dateFormat: DateFormat.jm()),
-              primaryYAxis: NumericAxis(
-                  labelFormat: '{value}%', borderColor: Colors.blue),
-              series: <ChartSeries<ChartData, DateTime>>[
-                LineSeries<ChartData, DateTime>(
-                    dataSource: chartData,
-                    xValueMapper: (ChartData data, _) => data.x,
-                    yValueMapper: (ChartData data, _) => data.y),
-              ],
-            )),
+            child: oneDay == true
+                ? SfCartesianChart(
+                    tooltipBehavior: tooltipBehavior,
+                    primaryXAxis: DateTimeAxis(
+                        rangePadding: ChartRangePadding.additional,
+                        dateFormat: DateFormat.jm()),
+                    primaryYAxis: NumericAxis(
+                        labelFormat: '{value}%', borderColor: Colors.blue),
+                    series: <ChartSeries<ChartData, DateTime>>[
+                      LineSeries<ChartData, DateTime>(
+                          dataSource: chartData,
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) => data.y),
+                    ],
+                  )
+                : SfCartesianChart(
+                    primaryXAxis: DateTimeAxis(
+                        rangePadding: ChartRangePadding.additional),
+                    primaryYAxis: NumericAxis(
+                        labelFormat: '{value}%', borderColor: Colors.blue),
+                    series: <ChartSeries<ChartData, DateTime>>[
+                      LineSeries<ChartData, DateTime>(
+                          dataSource: chartData,
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) => data.y),
+                    ],
+                  )),
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: Row(
@@ -55,7 +87,7 @@ class MeasuresChart extends StatelessWidget {
               ),
               Column(
                 children: [
-                  getBodyText("20/2/2023", false),
+                  getBodyText("27/2/2023", false),
                   SizedBox(
                       height: SizeConfig.blockSizeVertical * 10,
                       width: SizeConfig.blockSizeHorizontal * 20,
@@ -67,7 +99,7 @@ class MeasuresChart extends StatelessWidget {
               ),
               Column(
                 children: [
-                  getBodyText("20/2/2023", false),
+                  getBodyText("27/2/2023", false),
                   SizedBox(
                       height: SizeConfig.blockSizeVertical * 10,
                       width: SizeConfig.blockSizeHorizontal * 20,
