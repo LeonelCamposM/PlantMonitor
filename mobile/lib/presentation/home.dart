@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:plant_monitor/infraestructure/users_limit_repo.dart';
 import 'package:plant_monitor/infraestructure/users_measures_repo.dart';
 import 'package:plant_monitor/presentation/core/size_config.dart';
-import 'package:plant_monitor/presentation/measures/measures_chart.dart';
 
 enum NavigationState {
   home,

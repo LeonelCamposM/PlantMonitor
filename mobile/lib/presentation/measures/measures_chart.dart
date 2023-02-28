@@ -87,6 +87,9 @@ class MeasuresChart extends StatelessWidget {
                   )
                 : oneMonth == true
                     ? SfCartesianChart(
+                        legend: Legend(
+                          isVisible: true,
+                        ),
                         tooltipBehavior: tooltipBehavior,
                         primaryXAxis: DateTimeAxis(
                             rangePadding: ChartRangePadding.additional,
@@ -95,6 +98,7 @@ class MeasuresChart extends StatelessWidget {
                             labelFormat: '{value}%', borderColor: Colors.blue),
                         series: <ChartSeries<ChartData, DateTime>>[
                           LineSeries<ChartData, DateTime>(
+                              name: "Humedad del suelo ",
                               dataSource: chartData,
                               xValueMapper: (ChartData data, _) => data.x,
                               yValueMapper: (ChartData data, _) => data.y),

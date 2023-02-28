@@ -20,6 +20,7 @@ dependencies:
   syncfusion_flutter_charts: ^20.4.50
   app_settings: ^4.2.0
   environment_sensors: ^0.1.1
+  intl: ^0.18.0
 
 
 dev_dependencies:

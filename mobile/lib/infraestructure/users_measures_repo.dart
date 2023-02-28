@@ -13,6 +13,7 @@ void addMeasure(Measure measure) async {
   await measuresRef.push().set(userMeasure.toJson());
 }
 
+// ignore: must_be_immutable
 class UserMeasuresChart extends StatelessWidget {
   UserMeasuresChart({
     Key? key,
