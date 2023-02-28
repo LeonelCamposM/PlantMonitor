@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_monitor/domain/sensor_measure.dart';
+import 'package:plant_monitor/presentation/core/text.dart';
 import 'package:plant_monitor/presentation/measures/measures_chart.dart';
 
 void addMeasure(Measure measure) async {
@@ -22,10 +23,12 @@ class UserMeasuresChart extends StatelessWidget {
   List<UserMeasure> getMeasures(AsyncSnapshot<DatabaseEvent> snapshot) {
     List<UserMeasure> measures = [];
     if (snapshot.hasData) {
-      Map<dynamic, dynamic> map =
-          snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
-      for (var element in map.keys) {
-        measures.add(UserMeasure.fromJson(map[element]));
+      if (snapshot.data!.snapshot.value != null) {
+        Map<dynamic, dynamic> map =
+            snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+        for (var element in map.keys) {
+          measures.add(UserMeasure.fromJson(map[element]));
+        }
       }
     }
     return measures;
@@ -46,9 +49,11 @@ class UserMeasuresChart extends StatelessWidget {
         }
 
         List<UserMeasure> measures = getMeasures(snapshot);
-        return MeasuresChart(
-          measures: measures,
-        );
+        return measures.isNotEmpty
+            ? MeasuresChart(
+                measures: measures,
+              )
+            : Center(child: getTitleText("No tiene mediciones", false));
       },
     );
   }
