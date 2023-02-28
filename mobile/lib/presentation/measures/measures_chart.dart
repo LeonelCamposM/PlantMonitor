@@ -5,13 +5,16 @@ import 'package:plant_monitor/presentation/core/size_config.dart';
 import 'package:plant_monitor/presentation/core/text.dart';
 import 'package:plant_monitor/presentation/measures/date_picker.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 // ignore: must_be_immutable
 class MeasuresChart extends StatelessWidget {
   final List<ChartData> chartData = [];
-  bool oneDay = true;
+  bool oneDay = false;
+  bool oneMonth = false;
 
   MeasuresChart({super.key, required this.measures}) {
+    initializeDateFormatting();
     List<DateTime> days = [];
     for (var element in measures) {
       DateTime date = DateTime.parse(element.date);
@@ -22,6 +25,7 @@ class MeasuresChart extends StatelessWidget {
       return a.x.compareTo(b.x);
     });
     oneDay = sameDay(days);
+    oneMonth = isSameMonth(days);
   }
 
   bool sameDay(List<DateTime> fechas) {
@@ -31,6 +35,22 @@ class MeasuresChart extends StatelessWidget {
     for (int i = 1; i < fechas.length; i++) {
       DateTime fecha = fechas[i].toLocal();
       if (fecha.day != dia) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  bool isSameMonth(List<DateTime> dates) {
+    if (dates.isEmpty) {
+      return false;
+    }
+
+    final firstDate = dates.first;
+
+    for (final date in dates) {
+      if (date.month != firstDate.month || date.year != firstDate.year) {
         return false;
       }
     }
@@ -65,18 +85,35 @@ class MeasuresChart extends StatelessWidget {
                           yValueMapper: (ChartData data, _) => data.y),
                     ],
                   )
-                : SfCartesianChart(
-                    primaryXAxis: DateTimeAxis(
-                        rangePadding: ChartRangePadding.additional),
-                    primaryYAxis: NumericAxis(
-                        labelFormat: '{value}%', borderColor: Colors.blue),
-                    series: <ChartSeries<ChartData, DateTime>>[
-                      LineSeries<ChartData, DateTime>(
-                          dataSource: chartData,
-                          xValueMapper: (ChartData data, _) => data.x,
-                          yValueMapper: (ChartData data, _) => data.y),
-                    ],
-                  )),
+                : oneMonth == true
+                    ? SfCartesianChart(
+                        tooltipBehavior: tooltipBehavior,
+                        primaryXAxis: DateTimeAxis(
+                            rangePadding: ChartRangePadding.additional,
+                            dateFormat: DateFormat('dd MMMM', 'es')),
+                        primaryYAxis: NumericAxis(
+                            labelFormat: '{value}%', borderColor: Colors.blue),
+                        series: <ChartSeries<ChartData, DateTime>>[
+                          LineSeries<ChartData, DateTime>(
+                              dataSource: chartData,
+                              xValueMapper: (ChartData data, _) => data.x,
+                              yValueMapper: (ChartData data, _) => data.y),
+                        ],
+                      )
+                    : SfCartesianChart(
+                        tooltipBehavior: tooltipBehavior,
+                        primaryXAxis: DateTimeAxis(
+                            rangePadding: ChartRangePadding.additional,
+                            dateFormat: DateFormat('dd/MM/yyyy')),
+                        primaryYAxis: NumericAxis(
+                            labelFormat: '{value}%', borderColor: Colors.blue),
+                        series: <ChartSeries<ChartData, DateTime>>[
+                          LineSeries<ChartData, DateTime>(
+                              dataSource: chartData,
+                              xValueMapper: (ChartData data, _) => data.x,
+                              yValueMapper: (ChartData data, _) => data.y),
+                        ],
+                      )),
         Padding(
           padding: const EdgeInsets.all(20.0),
           child: Row(
