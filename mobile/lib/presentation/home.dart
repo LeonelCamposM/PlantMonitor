@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:plant_monitor/infraestructure/ap_sensor_repo.dart';
 import 'package:plant_monitor/infraestructure/users_limit_repo.dart';
 import 'package:plant_monitor/infraestructure/users_measures_repo.dart';
 import 'package:plant_monitor/presentation/core/size_config.dart';
+import 'package:plant_monitor/infraestructure/login/login.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 enum NavigationState {
   home,
@@ -38,6 +41,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   NavigationState navState = NavigationState.home;
+  bool signedIn = false;
 
   @override
   void initState() {
@@ -70,27 +74,58 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: page,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: navState.index,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.analytics), label: "Mediciones"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.notifications_active), label: "Alertas"),
-        ],
-        onTap: (pagina) {
-          setState(() {
-            navState = NavigationState.values[pagina];
-          });
-        },
-      ),
-    );
+    return signedIn == true
+        ? Scaffold(
+            appBar: AppBar(
+              title: Text(widget.title),
+            ),
+            body: page,
+            bottomNavigationBar: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
+              currentIndex: navState.index,
+              items: const [
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.home), label: "Inicio"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.analytics), label: "Mediciones"),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.notifications_active), label: "Alertas"),
+              ],
+              onTap: (pagina) {
+                setState(() {
+                  navState = NavigationState.values[pagina];
+                });
+              },
+            ),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              title: const Text("Inicio de sesión"),
+            ),
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: SizeConfig.blockSizeHorizontal * 80,
+                      height: SizeConfig.blockSizeVertical * 6,
+                      child: SignInButton(Buttons.Google,
+                          text: "Iniciar sesión con google", onPressed: () {
+                        signInWithGoogle().then((result) {
+                          print('succes');
+                          print(result.user);
+                          setState(() {
+                            signedIn = true;
+                          });
+                        });
+                      }),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
   }
 }

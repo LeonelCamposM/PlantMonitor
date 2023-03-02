@@ -21,7 +21,9 @@ dependencies:
   app_settings: ^4.2.0
   environment_sensors: ^0.1.1
   intl: ^0.18.0
-
+  firebase_auth: ^4.2.2
+  google_sign_in: ^6.0.1
+  flutter_signin_button: ^2.0.0
 
 dev_dependencies:
   flutter_test:
