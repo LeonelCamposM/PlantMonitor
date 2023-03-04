@@ -85,7 +85,7 @@ class MeasuresChart extends StatelessWidget {
                           yValueMapper: (ChartData data, _) => data.y),
                     ],
                   )
-                : oneMonth == true
+                : oneMonth == false
                     ? SfCartesianChart(
                         legend: Legend(
                           isVisible: true,

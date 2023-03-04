@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:plant_monitor/infraestructure/ap_sensor_repo.dart';
 import 'package:plant_monitor/infraestructure/users_limit_repo.dart';
 import 'package:plant_monitor/infraestructure/users_measures_repo.dart';
 import 'package:plant_monitor/presentation/core/size_config.dart';

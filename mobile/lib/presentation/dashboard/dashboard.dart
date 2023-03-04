@@ -108,9 +108,7 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
+    return
         // (lightAvailable)
         //     ? StreamBuilder<double>(
         //         stream: environmentSensors.light,
@@ -122,60 +120,66 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
         //               'Luz detectada: ${snapshot.data?.toStringAsFixed(2)} lx');
         //         })
         //     : const Text('No light sensor found'),
-        CircularChartCard(
-          sensorMeasure: widget.currentMeassure,
-          limit: widget.measureLimits,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+        Center(
+      child: Padding(
+        padding: const EdgeInsets.only(right: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                right: 20,
-              ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: SizeConfig.blockSizeHorizontal * 14,
-                    height: SizeConfig.blockSizeHorizontal * 14,
-                    child: FloatingActionButton(
-                      onPressed: (() => {
-                            addMeasure(widget.currentMeassure),
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                              content: Text('Medición guardada'),
-                            ))
-                          }),
-                      child: Icon(
-                        size: SizeConfig.blockSizeHorizontal * 8,
-                        Icons.save,
-                        color: Colors.white,
+            CircularChartCard(
+              sensorMeasure: widget.currentMeassure,
+              limit: widget.measureLimits,
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Column(
+                  children: [
+                    SizedBox(
+                      width: SizeConfig.blockSizeHorizontal * 14,
+                      height: SizeConfig.blockSizeHorizontal * 14,
+                      child: FloatingActionButton(
+                        onPressed: (() => {
+                              addMeasure(widget.currentMeassure),
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                content: Text('Medición guardada'),
+                              ))
+                            }),
+                        child: Icon(
+                          size: SizeConfig.blockSizeHorizontal * 8,
+                          Icons.save,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: SizeConfig.blockSizeHorizontal * 3,
-                  ),
-                  SizedBox(
-                    width: SizeConfig.blockSizeHorizontal * 14,
-                    height: SizeConfig.blockSizeHorizontal * 14,
-                    child: FloatingActionButton(
-                      onPressed: (() => {
-                            AppSettings.openWIFISettings(callback: () {}),
-                          }),
-                      child: Icon(
-                        size: SizeConfig.blockSizeHorizontal * 8,
-                        Icons.power_off,
-                        color: Colors.white,
+                    SizedBox(
+                      height: SizeConfig.blockSizeHorizontal * 3,
+                    ),
+                    SizedBox(
+                      width: SizeConfig.blockSizeHorizontal * 14,
+                      height: SizeConfig.blockSizeHorizontal * 14,
+                      child: FloatingActionButton(
+                        onPressed: (() => {
+                              AppSettings.openWIFISettings(callback: () {}),
+                            }),
+                        child: Icon(
+                          size: SizeConfig.blockSizeHorizontal * 8,
+                          Icons.power_off,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 }
