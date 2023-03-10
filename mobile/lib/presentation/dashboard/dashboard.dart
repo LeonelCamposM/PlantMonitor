@@ -33,9 +33,13 @@ class DisconectedDashboard extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox(
-              height: SizeConfig.blockSizeVertical * 70,
-            ),
+            SizeConfig.blockSizeVertical <= 8.1
+                ? SizedBox(
+                    height: SizeConfig.blockSizeVertical * 65,
+                  )
+                : SizedBox(
+                    height: SizeConfig.blockSizeVertical * 70,
+                  ),
           ],
         ),
         Column(
