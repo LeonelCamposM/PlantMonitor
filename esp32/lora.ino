@@ -15,6 +15,7 @@
 String rssi = "RSSI --";
 String messageSize = "--";
 String packet;
+String globalPacket;
 
 bool startLora() {
   bool error = false;
@@ -34,9 +35,8 @@ void handleRequest(int packetSize, String date) {
   messageSize = String(packetSize, DEC);
   for (int i = 0; i < packetSize; i++) { packet += (char)LoRa.read(); }
   rssi = "RSSI " + String(LoRa.packetRssi(), DEC);
-  Serial.println("[Server] sending ack");
-  sendLora("ack");
   saveData(MEASURE_PATH, packet, date);
+
   Serial.println("Received " + messageSize + " bytes");
   Serial.println(packet);
   Serial.println(rssi);
@@ -50,7 +50,7 @@ String receiveLora(String date) {
       handleRequest(packetSize, date);
       break;
     }
-    delay(100);
+    //delay(100);
   }
   return packet;
 }
@@ -65,7 +65,7 @@ String timeoutReceiveLora() {
     }
     int packetSize = LoRa.parsePacket();
     Serial.println(packetSize);
-    if (packetSize) { 
+    if (packetSize) {
       Serial.println("[Sensor] ack arrived");
       packet = "ack";
       break;
@@ -80,7 +80,7 @@ void ackSendLora(String message) {
   String ack = "";
   int timeWaited = 0;
   while (ack != "ack") {
-    if(timeWaited > 15000){
+    if (timeWaited > 15000) {
       ack = "error";
       break;
     }
