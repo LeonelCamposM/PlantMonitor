@@ -13,7 +13,6 @@ ESP32Time rtc(3600);
 bool start_lora = false;
 
 void goToSleep() {
-  Serial.println("Going to deep sleep");
   esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_OFF);
   esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_SLOW_MEM, ESP_PD_OPTION_OFF);
   esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_FAST_MEM, ESP_PD_OPTION_OFF);
@@ -51,7 +50,6 @@ void setup() {
     String jsonString;
     serializeJson(message, jsonString);
     sendLora(String(jsonString));
-    // ackSendLora(String(jsonString));
     Serial.println("enviado " + jsonString);
     sleepLora();
   }
