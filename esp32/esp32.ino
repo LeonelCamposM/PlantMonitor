@@ -1,6 +1,6 @@
 #include "WiFi.h"
 #define DEBUG
-//#define SENSOR_NODE
+#define SENSOR_NODE
 #include <ArduinoJson.h>
 #include <ESP32Time.h>
 
@@ -48,7 +48,8 @@ void setup() {
 
     String jsonString;
     serializeJson(message, jsonString);
-    ackSendLora(String(jsonString));
+    sendLora(String(jsonString));
+    // ackSendLora(String(jsonString));
     Serial.println("enviado " + jsonString);
     sleepLora();
   }

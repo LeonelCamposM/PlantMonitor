@@ -103,14 +103,9 @@ void ackSendLora(String message) {
 }
 
 void sendLora(String message) {
-  int counter = 0;
-  while (counter != 10) {
-    LoRa.beginPacket();
-    LoRa.print(message);
-    LoRa.endPacket();
-    delay(100);
-    counter++;
-  }
+  LoRa.beginPacket();
+  LoRa.print(message);
+  LoRa.endPacket();
 }
 
 void sleepLora() {
