@@ -30,16 +30,16 @@ bool startLora() {
 }
 
 void handleRequest(int packetSize, String date) {
-  Serial.println("LoRa Receiver Callback");
   packet = "";
   messageSize = String(packetSize, DEC);
   for (int i = 0; i < packetSize; i++) { packet += (char)LoRa.read(); }
   rssi = "RSSI " + String(LoRa.packetRssi(), DEC);
   saveData(MEASURE_PATH, packet, date);
-
-  Serial.println("Received " + messageSize + " bytes");
-  Serial.println(packet);
-  Serial.println(rssi);
+  #ifdef DEBUG
+    Serial.println("Received " + messageSize + " bytes");
+    Serial.println(packet);
+    Serial.println(rssi);
+  #endif
 }
 
 String receiveLora(String date) {
@@ -50,58 +50,8 @@ String receiveLora(String date) {
       handleRequest(packetSize, date);
       break;
     }
-    //delay(100);
   }
   return packet;
-}
-
-String timeoutReceiveLora() {
-  int timeWaited = 0;
-  while (true) {
-    packet = "";
-    if (timeWaited > 5000) {
-      Serial.println("[Sensor] timeout");
-      break;
-    }
-    int packetSize = LoRa.parsePacket();
-    Serial.println(packetSize);
-    if (packetSize) {
-      Serial.println("[Sensor] ack arrived");
-      packet = "ack";
-      break;
-    }
-    delay(100);
-    timeWaited += 100;
-  }
-  return packet;
-}
-
-void ackSendLora(String message) {
-  String ack = "";
-  int timeWaited = 0;
-  while (ack != "ack") {
-    if (timeWaited > 15000) {
-      ack = "error";
-      break;
-    }
-
-    sendLora(message);
-    ack = timeoutReceiveLora();
-    Serial.println(ack);
-    timeWaited += 5000;
-    if (ack == "") {
-      Serial.println("[Sensor] Stop listening ack by timeout ... ");
-    }
-  }
-
-  if (ack == "error") {
-    Serial.println("[Sensor] server unreachable ");
-  } else {
-    Serial.println("[Sensor] arrived ack: " + ack);
-    setChargeLed(true);
-    delay(1000);
-    setChargeLed(false);
-  }
 }
 
 void sendLora(String message) {
