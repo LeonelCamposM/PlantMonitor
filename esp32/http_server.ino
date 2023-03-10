@@ -23,6 +23,15 @@ void startHttpServer() {
     request->send(200, "text/plain", "Receive: " + message);
   });
 
+  server.on("/onDeleteAllData", HTTP_GET, [](AsyncWebServerRequest* request) {
+    bool response = remove_file(MEASURE_PATH);
+    if(response){
+      request->send(200, "text/plain", 200);
+    } else {
+      request->send(200, "text/plain", 404);
+    }
+  });
+
   server.on("/onGetAllData", HTTP_GET, [](AsyncWebServerRequest* request) {
     request->send(200, "text/plain", getAllData(MEASURE_PATH));
   });

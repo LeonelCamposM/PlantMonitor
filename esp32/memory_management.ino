@@ -13,17 +13,17 @@
 
 SPIClass sd_spi(HSPI);
 
-bool remove_file() {
+bool remove_file(String path) {
   bool response = false;
   sd_spi.begin(SD_SCK, SD_MISO, SD_MOSI, SD_CS);
   if (!SD.begin(SD_CS, sd_spi)) {
     Serial.println("SD Card: mounting failed.");
   } else {
     Serial.println("SD Card: mounted.");
-    bool exist = SD.exists("/measure_data.txt");
+    bool exist = SD.exists(path);
     Serial.println("Sd exist: " + String(exist));
     if (exist) {
-      response = SD.remove("/measure_data.txt");
+      response = SD.remove(path);
     }
     sd_spi.end();
     SD.end();
