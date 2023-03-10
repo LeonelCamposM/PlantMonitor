@@ -26,9 +26,9 @@ void startHttpServer() {
   server.on("/onDeleteAllData", HTTP_GET, [](AsyncWebServerRequest* request) {
     bool response = remove_file(MEASURE_PATH);
     if(response){
-      request->send(200, "text/plain", 200);
+      request->send(200, "text/plain", "200");
     } else {
-      request->send(200, "text/plain", 404);
+      request->send(200, "text/plain", "404");
     }
   });
 
@@ -36,8 +36,8 @@ void startHttpServer() {
     request->send(200, "text/plain", getAllData(MEASURE_PATH));
   });
 
-  server.on("/getLimits", HTTP_GET, [](AsyncWebServerRequest* request) {
-    request->send(200, "text/plain", getAllData(PREFERENCES_PATH));
+  server.on("/getName", HTTP_GET, [](AsyncWebServerRequest* request) {
+    request->send(200, "text/plain", "loraMonitor");
   });
 
   server.begin();
