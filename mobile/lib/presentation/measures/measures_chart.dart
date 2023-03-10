@@ -163,7 +163,7 @@ class MeasuresChart extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.only(bottom: 10, right: 10),
                   child: SizedBox(
                     width: SizeConfig.blockSizeHorizontal * 14,
                     height: SizeConfig.blockSizeHorizontal * 14,
