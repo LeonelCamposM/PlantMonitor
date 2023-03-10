@@ -25,12 +25,8 @@ void stopAccesPoint(){
 }
 
 void setupAPMode(){
-  setChargeLed(true);
+  //setChargeLed(true);
   startAccesPoint();
   startHttpServer();
 }
 
-void updateAPMeasurements(){
-  serverHandleClient(); 
-  delay(1);
-}
