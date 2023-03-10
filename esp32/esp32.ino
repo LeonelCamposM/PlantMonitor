@@ -62,9 +62,8 @@ void loop() {
   if (!start_lora) {
     String packet = "";
     String date = rtc.getTime("%F %R");
+    // sendLora("ack");
     packet = receiveLora(date);
     Serial.println("[Server] arrived: " + packet);
-    sendLora("ack");
-    Serial.println("[Server] sending ack");
   }
 }

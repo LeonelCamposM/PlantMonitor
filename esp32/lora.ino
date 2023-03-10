@@ -32,6 +32,8 @@ void handleRequest(int packetSize, String date) {
   messageSize = String(packetSize, DEC);
   for (int i = 0; i < packetSize; i++) { packet += (char)LoRa.read(); }
   rssi = "RSSI " + String(LoRa.packetRssi(), DEC);
+  Serial.println("[Server] sending ack");
+  sendLora("ack");
   saveData(packet, date);
   Serial.println("Received " + messageSize + " bytes");
   Serial.println(packet);
@@ -96,7 +98,6 @@ void ackSendLora(String message) {
 void sendLora(String message) {
   int counter = 0;
   while (counter != 10) {
-    Serial.println("Sending ack");
     LoRa.beginPacket();
     LoRa.print(message);
     LoRa.endPacket();
