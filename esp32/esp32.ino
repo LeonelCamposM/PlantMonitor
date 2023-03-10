@@ -4,6 +4,8 @@
 #include <ArduinoJson.h>
 #include <ESP32Time.h>
 
+#define MEASURE_PATH "/measure_data.txt"
+
 #define uS_TO_S_FACTOR 1000000
 #define TIME_TO_SLEEP 60
 int counter = 0;
@@ -54,6 +56,7 @@ void setup() {
 #else
 
   start_lora = startLora();
+  setupAPMode();
 
 #endif
 }

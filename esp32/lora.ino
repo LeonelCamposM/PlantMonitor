@@ -10,6 +10,8 @@
 #define DI0 26   // GPIO26 -- SX1278's IRQ(Interrupt Request)
 #define BAND 903E6
 
+#define MEASURE_PATH "/measure_data.txt"
+
 String rssi = "RSSI --";
 String messageSize = "--";
 String packet;
@@ -34,7 +36,7 @@ void handleRequest(int packetSize, String date) {
   rssi = "RSSI " + String(LoRa.packetRssi(), DEC);
   Serial.println("[Server] sending ack");
   sendLora("ack");
-  saveData(packet, date);
+  saveData(MEASURE_PATH, packet, date);
   Serial.println("Received " + messageSize + " bytes");
   Serial.println(packet);
   Serial.println(rssi);

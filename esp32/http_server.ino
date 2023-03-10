@@ -1,31 +1,39 @@
 #include <WebServer.h>
 #include <ArduinoJson.h>
 
-WebServer server(80);
+#include <WiFi.h>
+#include "ESPAsyncWebServer.h"
 
-void onGetSensorData() {
-  StaticJsonDocument<200> jsonDoc;
-  int percentageBattery = getBatteryPercentage();
-  jsonDoc["humidity"] = getMoisturePercentage();
-  jsonDoc["battery"] = percentageBattery;
-  String jsonString;
-  serializeJson(jsonDoc, jsonString);
-  server.send(200, "json/doc", jsonString);
-}
+#define MEASURE_PATH "/measure_data.txt"
+#define PREFERENCES_PATH "/preferences.txt"
+const char* PARAM_MESSAGE = "limits";
 
-void onGetAllData(){
-  String response = getAllData();
-  server.send(200, "json/doc", response);
-}
+AsyncWebServer server(80);
 
-void startHttpServer(){
-  server.on("/getSensorData", HTTP_GET, onGetSensorData);
+void startHttpServer() {
+
+  server.on("/onUpdatePreferences", HTTP_GET, [](AsyncWebServerRequest* request) {
+    String message;
+    if (request->hasParam(PARAM_MESSAGE)) {
+      message = request->getParam(PARAM_MESSAGE)->value();
+      saveData(PREFERENCES_PATH, message, "");
+    } else {
+      message = "No message sent";
+    }
+    request->send(200, "text/plain", "Receive: " + message);
+  });
+
+  server.on("/onGetAllData", HTTP_GET, [](AsyncWebServerRequest* request) {
+    request->send(200, "text/plain", getAllData(MEASURE_PATH));
+  });
+
+  server.on("/getLimits", HTTP_GET, [](AsyncWebServerRequest* request) {
+    request->send(200, "text/plain", getAllData(PREFERENCES_PATH));
+  });
+
   server.begin();
-  #ifdef DEBUG
-  Serial.println("Listening on 192.168.1.22:80");
-  #endif
-}
 
-void serverHandleClient(){
-  server.handleClient();
+#ifdef DEBUG
+  Serial.println("Listening on 192.168.1.22:80");
+#endif
 }

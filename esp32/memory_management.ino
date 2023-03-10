@@ -8,7 +8,8 @@
 #define SD_SCK 14
 #define SD_MOSI 15
 #define SD_MISO 2
-#define LOG_PATH "/measure_data.txt"
+#define MEASURE_PATH "/measure_data.txt"
+#define PREFERENCES_PATH "/preferences.txt"
 
 SPIClass sd_spi(HSPI);
 
@@ -30,19 +31,21 @@ bool remove_file() {
   return response;
 }
 
-void saveData(String data, String time) {
+void saveData(String path, String data, String time) {
   sd_spi.begin(SD_SCK, SD_MISO, SD_MOSI, SD_CS);
   if (!SD.begin(SD_CS, sd_spi)) {
     Serial.println("SD Card: mounting failed.");
   } else {
     Serial.println("SD Card: mounted.");
-    data.replace("today", time);
+    if(time != "") {
+      data.replace("today", time);
+    }
     data += ";";
     File dataFile;
-    if (SD.exists(LOG_PATH)) {
-      dataFile = SD.open(LOG_PATH, "a");
+    if (SD.exists(path) && path != PREFERENCES_PATH) {
+      dataFile = SD.open(path, "a");
     } else {
-      dataFile = SD.open(LOG_PATH, FILE_WRITE);
+      dataFile = SD.open(path, FILE_WRITE);
     }
 
     if (dataFile) {
@@ -56,14 +59,14 @@ void saveData(String data, String time) {
   }
 }
 
-String getAllData() {
+String getAllData(String path) {
   String response = "";
   sd_spi.begin(SD_SCK, SD_MISO, SD_MOSI, SD_CS);
   if (!SD.begin(SD_CS, sd_spi)) {
     Serial.println("SD Card: mounting failed.");
   } else {
     Serial.println("SD Card: mounted.");
-    File dataFile = SD.open(LOG_PATH);
+    File dataFile = SD.open(path);
     if (dataFile) {
       while (dataFile.available()) {                   
         response += dataFile.readStringUntil('\n');  
