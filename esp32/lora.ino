@@ -60,8 +60,10 @@ String timeoutReceiveLora(){
       break;  
     }
     int packetSize = LoRa.parsePacket();
+    Serial.println(packetSize);
     if (packetSize) { 
-      handleRequest(packetSize);  
+      Serial.println("[Sensor] ack arrived");
+      packet = "ack";
       break;
     }
     delay(100);
@@ -73,14 +75,15 @@ String timeoutReceiveLora(){
 void ackSendLora(String message){
   String ack = "";
   int timeWaited = 0;
-  while (ack != message) {
-    if(timeWaited > 10000){
+  while (ack != "ack") {
+    if(timeWaited > 15000){
       ack = "error";
       break;
     }
 
     sendLora(message);
     ack = timeoutReceiveLora();
+    Serial.println(ack);
     timeWaited += 5000;
     if(ack == ""){
       Serial.println("[Sensor] Stop listening ack by timeout ... "); 
@@ -91,6 +94,9 @@ void ackSendLora(String message){
     Serial.println("[Sensor] server unreachable ");
   }else{
     Serial.println("[Sensor] arrived ack: " + ack);
+    setChargeLed(true);
+    delay(1000);
+    setChargeLed(false);
   }
 }
 

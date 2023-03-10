@@ -35,9 +35,11 @@ void setup() {
         message["altitude"] = getBMPAltitude();
       }
       if(!startAxp192()){
+        setChargeValues();
         message["battery"] = getBatteryPercentage();
       }
       message["humidity"] = getMoisturePercentage();
+      message["date"] = "today";
 
       String jsonString;
       serializeJson(message, jsonString);
