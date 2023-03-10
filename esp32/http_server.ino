@@ -13,6 +13,11 @@ void onGetSensorData() {
   server.send(200, "json/doc", jsonString);
 }
 
+void onGetAllData(){
+  String response = getAllData();
+  server.send(200, "json/doc", response);
+}
+
 void startHttpServer(){
   server.on("/getSensorData", HTTP_GET, onGetSensorData);
   server.begin();
