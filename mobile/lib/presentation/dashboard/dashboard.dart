@@ -6,6 +6,8 @@ import 'package:plant_monitor/presentation/core/size_config.dart';
 import 'package:plant_monitor/presentation/core/text.dart';
 import 'package:plant_monitor/presentation/dashboard/circular_chart.dart';
 import 'package:environment_sensors/environment_sensors.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class DisconectedDashboard extends StatelessWidget {
   const DisconectedDashboard({super.key});
@@ -87,40 +89,43 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
   bool lightAvailable = true;
 
   final environmentSensors = EnvironmentSensors();
+  List<Measure> measures = [];
 
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    bool lightAvailable;
+  Future<List<Measure>> getNewMeasures() async {
+    print("new");
+    try {
+      final response = await http.get(
+        Uri.parse('http://192.168.1.22:80/getAllData'),
+      );
+      if (response.statusCode == 200) {
+        Map map = json.decode(response.body);
+        print(map);
+      }
+    } catch (e) {
+      print("catch");
+      print(e);
+    }
+    return [];
+  }
 
-    lightAvailable =
-        await environmentSensors.getSensorAvailable(SensorType.Light);
-
-    setState(() {
-      lightAvailable = lightAvailable;
-    });
+  void onPressed(context) async {
+    measures = await getNewMeasures();
+    for (var element in measures) {
+      addMeasure(element);
+    }
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text('Mediciónes recolectadas'),
+    ));
   }
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return
-        // (lightAvailable)
-        //     ? StreamBuilder<double>(
-        //         stream: environmentSensors.light,
-        //         builder: (context, snapshot) {
-        //           if (!snapshot.hasData) {
-        //             return const CircularProgressIndicator();
-        //           }
-        //           return Text(
-        //               'Luz detectada: ${snapshot.data?.toStringAsFixed(2)} lx');
-        //         })
-        //     : const Text('No light sensor found'),
-        Center(
+    return Center(
       child: Padding(
         padding: const EdgeInsets.only(right: 20),
         child: Column(
@@ -142,13 +147,7 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
                       width: SizeConfig.blockSizeHorizontal * 14,
                       height: SizeConfig.blockSizeHorizontal * 14,
                       child: FloatingActionButton(
-                        onPressed: (() => {
-                              addMeasure(widget.currentMeassure),
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                content: Text('Medición guardada'),
-                              ))
-                            }),
+                        onPressed: (() => {onPressed(context)}),
                         child: Icon(
                           size: SizeConfig.blockSizeHorizontal * 8,
                           Icons.save,

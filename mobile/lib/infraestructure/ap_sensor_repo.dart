@@ -27,14 +27,12 @@ class APSensorMeasureRepoState extends State<APSensorRepo> {
     try {
       final response = await http
           .get(
-        Uri.parse('http://192.168.1.22:80/getSensorData'),
+        Uri.parse('http://192.168.1.22:80/getLimits'),
       )
           .timeout(
         const Duration(seconds: 5),
         onTimeout: () {
-          // Time has run out, do what you wanted to do.
-          return http.Response(
-              'Error', 408); // Request Timeout response status code
+          return http.Response('Error', 408);
         },
       );
       if (response.statusCode == 200) {
@@ -66,13 +64,10 @@ class APSensorMeasureRepoState extends State<APSensorRepo> {
   void initState() {
     getUpdatedValue();
     super.initState();
-    timer = Timer.periodic(
-        const Duration(seconds: 1), (Timer t) => getUpdatedValue());
   }
 
   @override
   void dispose() {
-    timer?.cancel();
     super.dispose();
   }
 
