@@ -97,14 +97,15 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
   // Revisar si no hay mediciones nuevas y hay que buscar la ultima medicion de ese dia
   Future<List<Measure>> getNewMeasures() async {
     List<String> messages = [];
+    print("Ya hice la consulta :D");
     var httpClient = HttpClient();
-    var request =
-        await httpClient.getUrl(Uri.parse('http://192.168.1.22:80/getAllData'));
-    var response = await request.close();
-    await for (var line
-        in response.transform(utf8.decoder).transform(const LineSplitter())) {
-      messages.add(line);
-    }
+    //var request =
+    //    await httpClient.getUrl(Uri.parse('http://192.168.1.22:80/getAllData'));
+    //var response = await request.close();
+    //await for (var line
+    //    in response.transform(utf8.decoder).transform(const LineSplitter())) {
+    //  messages.add(line);
+    //}
     httpClient.close();
 
     List<Measure> measures = [];
@@ -114,7 +115,13 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
       Measure measure = Measure.fromJson(map);
       measures.add(measure);
     }
-    currentMeasure = measures.last;
+    if (measures.isEmpty) {
+      currentMeasure = (await getLastMeasure())!;
+      addLastMeasure(Measure(2, 2, 2, 2, 2, DateTime.now()));
+    } else {
+      currentMeasure = measures.last;
+      addLastMeasure(currentMeasure);
+    }
     return measures;
   }
 
@@ -133,6 +140,7 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
   }
 
   void uploadNewMeasures(context) async {
+    print("1");
     measures = await getNewMeasures();
     //TODO DESCOMENTAR
     // for (var element in measures) {

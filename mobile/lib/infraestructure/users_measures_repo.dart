@@ -10,6 +10,23 @@ void addMeasure(Measure measure) async {
   await measuresRef.push().set(measure.toJson());
 }
 
+void addLastMeasure(Measure measure) async {
+  DatabaseReference measuresRef =
+      FirebaseDatabase.instance.ref("users/leonel/lastMeasure/");
+  await measuresRef.set(measure.toJson());
+}
+
+Future<Measure?> getLastMeasure() async {
+  Measure? lastMeasure = Measure(0, 0, 0, 0, 0, DateTime.now());
+  final measuresRef = FirebaseDatabase.instance.ref();
+  final snapshot = await measuresRef.child('users/leonel/lastMeasure/').get();
+  if (snapshot.exists) {
+    print(snapshot.value);
+    lastMeasure = snapshot.value as Measure?;
+  }
+  return lastMeasure;
+}
+
 // ignore: must_be_immutable
 class UserMeasuresChart extends StatelessWidget {
   UserMeasuresChart({

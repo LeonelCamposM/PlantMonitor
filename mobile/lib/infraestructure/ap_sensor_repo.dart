@@ -77,7 +77,7 @@ class APSensorMeasureRepoState extends State<APSensorRepo> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        conected == true
+        conected == false
             ? ConectedDashboard(measureLimits: widget.measureLimits)
             : const DisconectedDashboard(),
       ],
