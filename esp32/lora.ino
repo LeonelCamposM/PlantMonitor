@@ -25,6 +25,7 @@ bool startLora() {
     Serial.println("Starting LoRa failed!");
     error = true;
   }
+  LoRa.setSyncWord(0x12);
   LoRa.receive();
   return error;
 }
