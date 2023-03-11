@@ -107,8 +107,9 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
     }
     for (var element in maps) {
       print(element.toJson());
-      addMeasure(element);
     }
+
+    //TODO Hacer request
     //try {
     //  final response = await http.get(
     //    Uri.parse('http://192.168.1.22:80/getAllData'),
@@ -131,9 +132,12 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
 
   void uploadNewMeasures(context) async {
     measures = await getNewMeasures();
+    //TODO Descomentar
     // for (var element in measures) {
     //   addMeasure(element);
     // }
+    //TODO Borrar mediciones del sensor (http get)
+
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Mediciones recolectadas'),
     ));
