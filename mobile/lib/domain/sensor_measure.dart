@@ -1,17 +1,29 @@
 class Measure {
-  int humidity;
+  double temperature;
+  double pressure;
+  double altitude;
   int battery;
+  int humidity;
+  DateTime date;
 
-  Measure(this.humidity, this.battery);
+  Measure(this.temperature, this.pressure, this.altitude, this.battery,
+      this.humidity, this.date);
 
   factory Measure.fromJson(Map<dynamic, dynamic> json) => Measure(
-        json['humidity'] as int,
-        json['battery'] as int,
-      );
+      json['temperature' as double],
+      json['pressure' as double],
+      json['altitude' as double],
+      json['battery'] as int,
+      json['humidity'] as int,
+      json['date' as DateTime]);
 
   Map<dynamic, dynamic> toJson() => {
-        'humidity': humidity,
+        'temperature': temperature,
+        'pressure': pressure,
+        'altitude': altitude,
         'battery': battery,
+        'humidity': humidity,
+        'date': date
       };
 }
 

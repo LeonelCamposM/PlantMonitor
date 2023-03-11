@@ -97,18 +97,44 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
 
   Future<List<Measure>> getNewMeasures() async {
     print("new");
-    try {
-      final response = await http.get(
-        Uri.parse('http://192.168.1.22:80/getAllData'),
-      );
-      if (response.statusCode == 200) {
-        Map map = json.decode(response.body);
-        print(map);
-      }
-    } catch (e) {
-      print("catch");
-      print(e);
+    String messages =
+        '{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":0,"date":"2023-03-09 19:42"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":1,"date":"2023-03-09 19:45"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":1,"date":"2023-03-09 19:46"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":2,"date":"2023-03-09 19:46"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":0,"date":"2023-03-09 19:42"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":0,"date":"2023-03-09 19:44"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":0,"date":"2023-03-09 19:42"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":0,"date":"2023-03-09 19:42"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":88,"date":"2023-03-09 19:42"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":1,"date":"2023-03-09 19:42"}';
+    List<String> messages1 = messages.split(';');
+    print(messages1.length);
+    List<Measure> maps = [];
+    for (var message in messages1) {
+      Map map = jsonDecode(message);
+      map.forEach((key, value) {
+        //print(key);
+        //print(" :");
+        //print(value);
+        print("a");
+      });
+      //print(map);
+      Measure measure = Measure.fromJson(map);
+      print(measure.toJson());
+      //maps.add(measure);
     }
+    for (var element in maps) {
+      print(element);
+    }
+    //try {
+    //  final response = await http.get(
+    //    Uri.parse('http://192.168.1.22:80/getAllData'),
+    //  );
+    //  if (response.statusCode == 200) {
+    //    List<String> messages = response.body.split(';');
+    //    List<Map> maps = [];
+    //   for (var message in messages) {
+    //    maps.add(json.decode(message));
+    // }
+    //Map map = json.decode(response.body);
+    //  print(maps);
+    //}
+    //} catch (e) {
+    //  print("catch");
+    //  print(e);
+    //}
     return [];
   }
 

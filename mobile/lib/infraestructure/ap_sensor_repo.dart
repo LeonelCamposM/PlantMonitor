@@ -18,7 +18,7 @@ class APSensorRepo extends StatefulWidget {
 }
 
 class APSensorMeasureRepoState extends State<APSensorRepo> {
-  Measure sensorMeasure = Measure(0, 0);
+  Measure sensorMeasure = Measure(0, 0, 0, 0, 0, DateTime.now());
   Timer? timer;
   bool conected = false;
   int counter = 0;
@@ -78,7 +78,7 @@ class APSensorMeasureRepoState extends State<APSensorRepo> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        conected == true
+        conected == false
             ? ConectedDashboard(
                 currentMeassure: sensorMeasure,
                 measureLimits: widget.measureLimits)
