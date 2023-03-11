@@ -107,6 +107,7 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
     }
     for (var element in maps) {
       print(element.toJson());
+      addMeasure(element);
     }
     //try {
     //  final response = await http.get(
@@ -128,19 +129,20 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
     return [];
   }
 
-  void onPressed(context) async {
+  void uploadNewMeasures(context) async {
     measures = await getNewMeasures();
-    for (var element in measures) {
-      addMeasure(element);
-    }
+    // for (var element in measures) {
+    //   addMeasure(element);
+    // }
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Mediciónes recolectadas'),
+      content: Text('Mediciones recolectadas'),
     ));
   }
 
   @override
   void initState() {
     super.initState();
+    uploadNewMeasures(context);
   }
 
   @override
@@ -163,18 +165,6 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
               children: [
                 Column(
                   children: [
-                    SizedBox(
-                      width: SizeConfig.blockSizeHorizontal * 14,
-                      height: SizeConfig.blockSizeHorizontal * 14,
-                      child: FloatingActionButton(
-                        onPressed: (() => {onPressed(context)}),
-                        child: Icon(
-                          size: SizeConfig.blockSizeHorizontal * 8,
-                          Icons.save,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
                     SizedBox(
                       height: SizeConfig.blockSizeHorizontal * 3,
                     ),

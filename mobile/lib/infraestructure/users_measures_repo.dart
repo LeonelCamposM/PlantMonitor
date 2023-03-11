@@ -7,10 +7,7 @@ import 'package:plant_monitor/presentation/measures/measures_chart.dart';
 void addMeasure(Measure measure) async {
   DatabaseReference measuresRef =
       FirebaseDatabase.instance.ref("users/leonel/measures/");
-
-  UserMeasure userMeasure =
-      UserMeasure(measure.battery, DateTime.now().toString(), measure.humidity);
-  await measuresRef.push().set(userMeasure.toJson());
+  await measuresRef.push().set(measure.toJson());
 }
 
 // ignore: must_be_immutable

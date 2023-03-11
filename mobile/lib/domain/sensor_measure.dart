@@ -23,7 +23,7 @@ class Measure {
         'altitude': altitude,
         'battery': battery,
         'humidity': humidity,
-        'date': date
+        'date': date.toString()
       };
 }
 
