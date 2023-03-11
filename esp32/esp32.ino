@@ -1,6 +1,6 @@
 #include "WiFi.h"
 #define DEBUG
-#define SENSOR_NODE
+// #define SENSOR_NODE
 #include <ArduinoJson.h>
 #include <ESP32Time.h>
 
