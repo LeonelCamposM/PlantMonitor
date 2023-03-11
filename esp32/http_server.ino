@@ -32,7 +32,7 @@ void startHttpServer() {
     }
   });
 
-  server.on("/onGetAllData", HTTP_GET, [](AsyncWebServerRequest* request) {
+  server.on("/getAllData", HTTP_GET, [](AsyncWebServerRequest* request) {
     request->send(200, "text/plain", getAllData(MEASURE_PATH));
   });
 
