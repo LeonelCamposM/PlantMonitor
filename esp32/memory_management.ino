@@ -73,7 +73,7 @@ String getAllData(String path) {
       }
       dataFile.close();
     } else {
-      Serial.println("error opening test.txt");
+      Serial.println("error opening file");
     }
     SD.end();
     sd_spi.end();

@@ -46,7 +46,6 @@ void setup() {
       }
       message["humidity"] = getMoisturePercentage();
       message["date"] = "today";
-
     String jsonString;
     serializeJson(message, jsonString);
     sendLora(String(jsonString));

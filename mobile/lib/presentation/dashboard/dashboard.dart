@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_monitor/domain/sensor_measure.dart';
@@ -79,65 +81,64 @@ class DisconectedDashboard extends StatelessWidget {
 
 // ignore: must_be_immutable
 class ConectedDashboard extends StatefulWidget {
-  Measure currentMeassure;
   MeasureLimit measureLimits;
 
-  ConectedDashboard(
-      {super.key, required this.currentMeassure, required this.measureLimits});
+  ConectedDashboard({super.key, required this.measureLimits});
 
   @override
   State<ConectedDashboard> createState() => _ConectedDashboardState();
 }
 
 class _ConectedDashboardState extends State<ConectedDashboard> {
-  bool lightAvailable = true;
-
   final environmentSensors = EnvironmentSensors();
   List<Measure> measures = [];
+  Measure currentMeasure = Measure(0, 0, 0, 0, 0, DateTime.now());
 
+  // Revisar si no hay mediciones nuevas y hay que buscar la ultima medicion de ese dia
   Future<List<Measure>> getNewMeasures() async {
-    String messages =
-        '{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":0,"date":"2023-03-09 19:42"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":1,"date":"2023-03-09 19:45"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":1,"date":"2023-03-09 19:46"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":2,"date":"2023-03-09 19:46"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":0,"date":"2023-03-09 19:42"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":0,"date":"2023-03-09 19:44"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":0,"date":"2023-03-09 19:42"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":0,"date":"2023-03-09 19:42"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":88,"date":"2023-03-09 19:42"};{"temperature":26.25,"pressure":63804.74,"altitude":3734.923,"battery":0,"humidity":1,"date":"2023-03-09 19:42"}';
-    List<String> messages1 = messages.split(';');
-    List<Measure> maps = [];
-    for (var message in messages1) {
+    List<String> messages = [];
+    var httpClient = HttpClient();
+    var request =
+        await httpClient.getUrl(Uri.parse('http://192.168.1.22:80/getAllData'));
+    var response = await request.close();
+    await for (var line
+        in response.transform(utf8.decoder).transform(const LineSplitter())) {
+      messages.add(line);
+    }
+    httpClient.close();
+
+    List<Measure> measures = [];
+    for (var message in messages) {
+      message = message.replaceAll(";", "");
       Map map = jsonDecode(message);
       Measure measure = Measure.fromJson(map);
-      maps.add(measure);
+      measures.add(measure);
     }
-    for (var element in maps) {
-      print(element.toJson());
-    }
+    currentMeasure = measures.last;
+    return measures;
+  }
 
-    //TODO Hacer request
-    //try {
-    //  final response = await http.get(
-    //    Uri.parse('http://192.168.1.22:80/getAllData'),
-    //  );
-    //  if (response.statusCode == 200) {
-    //    List<String> messages = response.body.split(';');
-    //    List<Map> maps = [];
-    //   for (var message in messages) {
-    //    maps.add(json.decode(message));
-    // }
-    //Map map = json.decode(response.body);
-    //  print(maps);
-    //}
-    //} catch (e) {
-    //  print("catch");
-    //  print(e);
-    //}
-    return [];
+  void sendDeleteData() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://192.168.1.22:80/deleteAllData'),
+      );
+      if (response.statusCode == 200) {
+        print("data deleted");
+      }
+    } catch (e) {
+      print("catch");
+      print(e);
+    }
   }
 
   void uploadNewMeasures(context) async {
     measures = await getNewMeasures();
-    //TODO Descomentar
+    //TODO DESCOMENTAR
     // for (var element in measures) {
     //   addMeasure(element);
     // }
-    //TODO Borrar mediciones del sensor (http get)
-
+    //sendDeleteData();
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Mediciones recolectadas'),
     ));
@@ -158,7 +159,7 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CircularChartCard(
-              sensorMeasure: widget.currentMeassure,
+              sensorMeasure: currentMeasure,
               limit: widget.measureLimits,
             ),
             const SizedBox(
