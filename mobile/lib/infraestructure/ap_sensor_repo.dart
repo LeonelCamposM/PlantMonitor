@@ -59,6 +59,13 @@ class APSensorMeasureRepoState extends State<APSensorRepo> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void initState() {
     getUpdatedValue();
     super.initState();
@@ -76,7 +83,7 @@ class APSensorMeasureRepoState extends State<APSensorRepo> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        conected == true
+        conected == false
             ? ConectedDashboard(
                 measureLimits: widget.measureLimits,
                 lastMeasure: widget.lastMeasure,

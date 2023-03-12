@@ -73,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
     }
 
-    return signedIn == false
+    return signedIn == true
         ? Scaffold(
             appBar: AppBar(
               title: Text(widget.title),

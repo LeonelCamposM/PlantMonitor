@@ -171,7 +171,7 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             CircularChartCard(
-              sensorMeasure: currentMeasure,
+              sensorMeasure: widget.lastMeasure,
               limit: widget.measureLimits,
             ),
             const SizedBox(
