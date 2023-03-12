@@ -33,19 +33,19 @@ void setup() {
   esp_sleep_wakeup_cause_t wakeup_reason;
   wakeup_reason = esp_sleep_get_wakeup_cause();
 
-    if(!startLora()){
-      StaticJsonDocument<200> message;
-      if(!startBMP()){
-        message["temperature"] = getBMPTemperature();
-        message["pressure"] = getBMPPressure();
-        message["altitude"] = getBMPAltitude();
-      }
-      if(!startAxp192()){
-        setChargeValues();
-        message["battery"] = getBatteryPercentage();
-      }
-      message["humidity"] = getMoisturePercentage();
-      message["date"] = "today";
+  if (!startLora()) {
+    StaticJsonDocument<200> message;
+    if (!startBMP()) {
+      message["temperature"] = getBMPTemperature();
+      message["pressure"] = getBMPPressure();
+      message["altitude"] = getBMPAltitude();
+    }
+    if (!startAxp192()) {
+      setChargeValues();
+      message["battery"] = getBatteryPercentage();
+    }
+    message["humidity"] = getMoisturePercentage();
+    message["date"] = "today";
     String jsonString;
     serializeJson(message, jsonString);
     sendLora(String(jsonString));
