@@ -98,16 +98,16 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
   // Revisar si no hay mediciones nuevas y hay que buscar la ultima medicion de ese dia
   Future<List<Measure>> getNewMeasures() async {
     List<String> messages = [];
-    var httpClient = HttpClient();
-
-    var request =
-        await httpClient.getUrl(Uri.parse('http://192.168.1.22:80/getAllData'));
-    var response = await request.close();
-    await for (var line
-        in response.transform(utf8.decoder).transform(const LineSplitter())) {
-      messages.add(line);
-    }
-    httpClient.close();
+    // var httpClient = HttpClient();
+    // print("cosnul");
+    // var request =
+    //     await httpClient.getUrl(Uri.parse('http://192.168.1.22:80/getAllData'));
+    // var response = await request.close();
+    // await for (var line
+    //     in response.transform(utf8.decoder).transform(const LineSplitter())) {
+    //   messages.add(line);
+    // }
+    // httpClient.close();
 
     List<Measure> measures = [];
     for (var message in messages) {
@@ -117,6 +117,7 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
       measures.add(measure);
     }
     if (measures.isEmpty) {
+      print(widget.lastMeasure.humidity);
       setState(() {
         currentMeasure = widget.lastMeasure;
       });

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:plant_monitor/domain/sensor_measure.dart';
@@ -77,7 +76,7 @@ class APSensorMeasureRepoState extends State<APSensorRepo> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        conected == false
+        conected == true
             ? ConectedDashboard(
                 measureLimits: widget.measureLimits,
                 lastMeasure: widget.lastMeasure,

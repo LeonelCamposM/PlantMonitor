@@ -9,6 +9,9 @@ Map<dynamic, dynamic> getUpdatedValues(AsyncSnapshot<DatabaseEvent> snapshot) {
   Map<dynamic, dynamic> map = <dynamic, dynamic>{};
   if (snapshot.hasData) {
     map = snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+    map["error"] = false;
+  } else {
+    map["error"] = true;
   }
   return map;
 }
@@ -53,10 +56,15 @@ class SensorMeasureWidget extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('');
         }
-
+        Measure measure = Measure(0, 0, 0, 0, 0, DateTime.now());
+        MeasureLimit limit = MeasureLimit(0, 0);
         Map<dynamic, dynamic> map = getUpdatedValues(snapshot);
-        Measure measure = Measure.fromJson(map["lastMeasure"]);
-        MeasureLimit limit = MeasureLimit.fromJson(map["humidityLimit"]);
+        if (map["error"] == true) {
+        } else {
+          measure = Measure.fromJson(map["lastMeasure"]);
+          print("aaa" + measure.humidity.toString());
+          limit = MeasureLimit.fromJson(map["humidityLimit"]);
+        }
 
         return APSensorRepo(
           lastMeasure: measure,
@@ -88,9 +96,12 @@ class FirebaseAlertsWidget extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('');
         }
-
+        MeasureLimit limit = MeasureLimit(0, 0);
         Map<dynamic, dynamic> map = getUpdatedValues(snapshot);
-        MeasureLimit limit = MeasureLimit.fromJson(map["humidityLimit"]);
+        if (map["error"] == true) {
+        } else {
+          limit = MeasureLimit.fromJson(map["humidityLimit"]);
+        }
 
         return AlertSettings(
           limit: limit,
