@@ -35,12 +35,20 @@ void handleRequest(int packetSize, String date) {
   messageSize = String(packetSize, DEC);
   for (int i = 0; i < packetSize; i++) { packet += (char)LoRa.read(); }
   rssi = "RSSI " + String(LoRa.packetRssi(), DEC);
-  saveData(MEASURE_PATH, packet, date);
-  #ifdef DEBUG
-    Serial.println("Received " + messageSize + " bytes");
-    Serial.println(packet);
-    Serial.println(rssi);
-  #endif
+
+  bool validatePacket = packet.indexOf("temperature") != -1 && 
+                        packet.indexOf("pressure") != -1 && 
+                        packet.indexOf("altitude") != -1 && 
+                        packet.indexOf("humidity") != -1 && 
+                        packet.indexOf("battery") != -1;
+  if (validatePacket) {
+    saveData(MEASURE_PATH, packet, date);
+  }
+#ifdef DEBUG
+  Serial.println("Received " + messageSize + " bytes");
+  Serial.println(packet);
+  Serial.println(rssi);
+#endif
 }
 
 String receiveLora(String date) {
