@@ -7,11 +7,11 @@ import 'package:plant_monitor/presentation/dashboard/dashboard.dart';
 
 // ignore: must_be_immutable
 class APSensorRepo extends StatefulWidget {
-  APSensorRepo({
-    Key? key,
-    required this.measureLimits,
-  }) : super(key: key);
+  APSensorRepo(
+      {Key? key, required this.measureLimits, required this.lastMeasure})
+      : super(key: key);
   MeasureLimit measureLimits;
+  Measure lastMeasure;
 
   @override
   State<APSensorRepo> createState() => APSensorMeasureRepoState();
@@ -78,7 +78,10 @@ class APSensorMeasureRepoState extends State<APSensorRepo> {
     return Column(
       children: [
         conected == false
-            ? ConectedDashboard(measureLimits: widget.measureLimits)
+            ? ConectedDashboard(
+                measureLimits: widget.measureLimits,
+                lastMeasure: widget.lastMeasure,
+              )
             : const DisconectedDashboard(),
       ],
     );

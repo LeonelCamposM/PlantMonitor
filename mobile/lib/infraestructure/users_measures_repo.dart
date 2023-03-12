@@ -22,7 +22,7 @@ Future<Measure?> getLastMeasure() async {
   final snapshot = await measuresRef.child('users/leonel/lastMeasure/').get();
   if (snapshot.exists) {
     print(snapshot.value);
-    lastMeasure = snapshot.value as Measure?;
+    lastMeasure = Measure.fromJson(snapshot.value as Map<dynamic, dynamic>);
   }
   return lastMeasure;
 }

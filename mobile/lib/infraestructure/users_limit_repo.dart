@@ -4,14 +4,23 @@ import 'package:plant_monitor/domain/sensor_measure.dart';
 import 'package:plant_monitor/infraestructure/ap_sensor_repo.dart';
 import 'package:plant_monitor/presentation/settings/settings.dart';
 
-MeasureLimit getUpdatedLimit(AsyncSnapshot<DatabaseEvent> snapshot) {
-  MeasureLimit limit = MeasureLimit(0, 0);
+Map<dynamic, dynamic> getUpdatedValues(AsyncSnapshot<DatabaseEvent> snapshot) {
+  // check null todo
+  Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+  if (snapshot.hasData) {
+    map = snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+  }
+  return map;
+}
+
+Measure getUpdatedMeasure(AsyncSnapshot<DatabaseEvent> snapshot) {
+  Measure measure = Measure(0, 0, 0, 0, 0, DateTime.now());
   if (snapshot.hasData) {
     Map<dynamic, dynamic> map =
         snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
-    limit = MeasureLimit.fromJson(map);
+    measure = Measure.fromJson(map);
   }
-  return limit;
+  return measure;
 }
 
 void updateUserLimits(double min, double max) async {
@@ -29,7 +38,7 @@ class SensorMeasureWidget extends StatelessWidget {
     Key? key,
   }) : super(key: key);
   DatabaseReference humididtyLimitRef =
-      FirebaseDatabase.instance.ref("users/leonel/humidityLimit");
+      FirebaseDatabase.instance.ref("users/leonel");
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +54,12 @@ class SensorMeasureWidget extends StatelessWidget {
           return const Text('');
         }
 
-        MeasureLimit limit = getUpdatedLimit(snapshot);
+        Map<dynamic, dynamic> map = getUpdatedValues(snapshot);
+        Measure measure = Measure.fromJson(map["lastMeasure"]);
+        MeasureLimit limit = MeasureLimit.fromJson(map["humidityLimit"]);
+
         return APSensorRepo(
+          lastMeasure: measure,
           measureLimits: limit,
         );
       },
@@ -60,7 +73,7 @@ class FirebaseAlertsWidget extends StatelessWidget {
     Key? key,
   }) : super(key: key);
   DatabaseReference humididtyLimitRef =
-      FirebaseDatabase.instance.ref("users/leonel/humidityLimit");
+      FirebaseDatabase.instance.ref("users/leonel");
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +89,9 @@ class FirebaseAlertsWidget extends StatelessWidget {
           return const Text('');
         }
 
-        MeasureLimit limit = getUpdatedLimit(snapshot);
+        Map<dynamic, dynamic> map = getUpdatedValues(snapshot);
+        MeasureLimit limit = MeasureLimit.fromJson(map["humidityLimit"]);
+
         return AlertSettings(
           limit: limit,
         );
