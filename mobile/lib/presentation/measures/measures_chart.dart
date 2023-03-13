@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_monitor/domain/sensor_measure.dart';
 import 'package:plant_monitor/presentation/core/size_config.dart';

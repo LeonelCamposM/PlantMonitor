@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:plant_monitor/domain/sensor_measure.dart';
 import 'package:plant_monitor/presentation/core/text.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 
 // ignore: must_be_immutable
 class CircularChartCard extends StatelessWidget {
@@ -14,8 +13,8 @@ class CircularChartCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           limit.max > sensorMeasure.humidity &&
                   limit.min < sensorMeasure.humidity
@@ -33,7 +32,7 @@ class CircularChartCard extends StatelessWidget {
               ? PercentageWidget(
                   percentaje: sensorMeasure.battery.toDouble(),
                   title: "Batería",
-                  barColor: Colors.yellow,
+                  barColor: const Color.fromARGB(255, 236, 213, 3),
                 )
               : PercentageWidget(
                   percentaje: sensorMeasure.battery.toDouble(),
@@ -63,37 +62,37 @@ class PercentageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 10,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        children: [
-          // ignore: prefer_const_constructors
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: getTitleText(title, false),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Card(
+          color: barColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
           ),
-          const SizedBox(
-            height: 10,
+          elevation: 10,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: title == "Humedad"
+                ? const Icon(color: Colors.white, Icons.water_drop)
+                : title == "Temperatura"
+                    ? const Icon(color: Colors.white, Icons.device_thermostat)
+                    : const Icon(color: Colors.white, Icons.battery_5_bar),
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircularPercentIndicator(
-              animation: false,
-              animationDuration: 1000,
-              radius: 85,
-              lineWidth: 25,
-              percent: percentaje / 100,
-              progressColor: barColor,
-              circularStrokeCap: CircularStrokeCap.round,
-              center: getTitleText("$text%", false),
-            ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              getBodyText(title, false),
+              Row(
+                children: [getBodyText("${percentaje.ceil()} %", false)],
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

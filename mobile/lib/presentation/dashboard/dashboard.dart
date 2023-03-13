@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:plant_monitor/domain/sensor_measure.dart';
@@ -10,6 +8,8 @@ import 'package:plant_monitor/presentation/dashboard/circular_chart.dart';
 import 'package:environment_sensors/environment_sensors.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class DisconectedDashboard extends StatelessWidget {
   const DisconectedDashboard({super.key});
@@ -42,36 +42,6 @@ class DisconectedDashboard extends StatelessWidget {
                 : SizedBox(
                     height: SizeConfig.blockSizeVertical * 70,
                   ),
-          ],
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: SizeConfig.blockSizeHorizontal * 14,
-                          height: SizeConfig.blockSizeHorizontal * 14,
-                          child: FloatingActionButton(
-                            onPressed: (() => {
-                                  AppSettings.openWIFISettings(callback: () {})
-                                }),
-                            child: Icon(
-                              size: SizeConfig.blockSizeHorizontal * 8,
-                              Icons.power,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ))
-              ],
-            ),
           ],
         ),
       ],
@@ -151,9 +121,11 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
       addMeasure(element);
     }
     sendDeleteData();
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Mediciones recolectadas'),
-    ));
+    if (measures.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Mediciones recolectadas'),
+      ));
+    } else {}
   }
 
   @override
@@ -166,44 +138,41 @@ class _ConectedDashboardState extends State<ConectedDashboard> {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.only(right: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CircularChartCard(
-              sensorMeasure: widget.lastMeasure,
-              limit: widget.measureLimits,
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Column(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          elevation: 10,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      height: SizeConfig.blockSizeHorizontal * 3,
-                    ),
-                    SizedBox(
-                      width: SizeConfig.blockSizeHorizontal * 14,
-                      height: SizeConfig.blockSizeHorizontal * 14,
-                      child: FloatingActionButton(
-                        onPressed: (() => {
-                              AppSettings.openWIFISettings(callback: () {}),
-                            }),
-                        child: Icon(
-                          size: SizeConfig.blockSizeHorizontal * 8,
-                          Icons.power_off,
-                          color: Colors.white,
-                        ),
-                      ),
+                    Column(
+                      children: [
+                        getBodyText(
+                            " ${DateFormat('dd MMMM', 'es').format(widget.lastMeasure.date).replaceAll(" ", " de ")}" +
+                                " ${DateFormat(DateFormat.jm().pattern).format(widget.lastMeasure.date)}",
+                            false),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircularChartCard(
+                    sensorMeasure: widget.lastMeasure,
+                    limit: widget.measureLimits,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
